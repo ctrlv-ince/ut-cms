@@ -1,0 +1,1186 @@
+<div class="min-h-screen bg-[#F8FAFC] text-[#1E293B] flex font-sans selection:bg-blue-600 selection:text-white">
+
+  <!-- ================= NOTIFICATION TOAST ================= -->
+  @if (toastMessage()) {
+    <div class="fixed top-5 right-5 z-50 flex items-center gap-3 px-4 py-3 rounded-xl shadow-lg border text-xs font-semibold backdrop-blur-md transition-all"
+         [class.bg-green-50]="toastType() === 'success'"
+         [class.border-green-300]="toastType() === 'success'"
+         [class.text-[#16A34A]]="toastType() === 'success'"
+         [class.bg-red-50]="toastType() === 'error'"
+         [class.border-red-300]="toastType() === 'error'"
+         [class.text-[#DC2626]]="toastType() === 'error'">
+      <span class="w-2 h-2 rounded-full" [class.bg-[#16A34A]]="toastType() === 'success'" [class.bg-[#DC2626]]="toastType() === 'error'"></span>
+      <span>{{ toastMessage() }}</span>
+    </div>
+  }
+
+  <!-- ================= CLEAN WHITE LEFT NAVIGATION SIDEBAR ================= -->
+  <aside class="w-64 bg-white border-r border-[#E2E8F0] flex flex-col shrink-0 select-none shadow-xs">
+    
+    <!-- Directus Brand Header -->
+    <div class="h-16 px-5 border-b border-[#E2E8F0] flex items-center justify-between bg-white">
+      <div class="flex items-center gap-3">
+        <div class="w-8 h-8 rounded-lg bg-blue-600 flex items-center justify-center text-white shadow-xs">
+          <!-- Directus logo symbol -->
+          <svg class="w-5 h-5" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5">
+            <path stroke-linecap="round" stroke-linejoin="round" d="M20 7l-8-4-8 4m16 0l-8 4m8-4v10l-8 4m0-10L4 7m8 4v10M4 7v10l8 4" />
+          </svg>
+        </div>
+        <div>
+          <span class="text-sm font-bold text-[#1E293B] tracking-wide font-display">directus</span>
+          <span class="text-[10px] font-semibold text-blue-600 ml-1.5 px-1.5 py-0.5 rounded bg-blue-50 border border-blue-200">STUDIO</span>
+        </div>
+      </div>
+    </div>
+
+    <!-- Navigation Scroll Area -->
+    <div class="flex-1 overflow-y-auto py-4 px-3 space-y-6">
+
+      <!-- Section: Overview -->
+      <div>
+        <div class="px-3 mb-2 text-[10px] font-bold uppercase tracking-wider text-[#64748B]">Overview</div>
+        <button 
+          (click)="activeSection.set('dashboard')"
+          [class.bg-blue-50]="activeSection() === 'dashboard'"
+          [class.text-blue-600]="activeSection() === 'dashboard'"
+          [class.font-semibold]="activeSection() === 'dashboard'"
+          [class.text-[#64748B]]="activeSection() !== 'dashboard'"
+          [class.hover:bg-slate-50]="activeSection() !== 'dashboard'"
+          [class.hover:text-[#1E293B]]="activeSection() !== 'dashboard'"
+          class="w-full flex items-center gap-3 px-3 py-2 rounded-lg text-xs transition-colors text-left">
+          <svg class="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6a2 2 0 012-2h2a2 2 0 012 2v2a2 2 0 01-2 2H6a2 2 0 01-2-2V6zM14 6a2 2 0 012-2h2a2 2 0 012 2v2a2 2 0 01-2 2h-2a2 2 0 01-2-2V6zM4 16a2 2 0 012-2h2a2 2 0 012 2v2a2 2 0 01-2 2H6a2 2 0 01-2-2v-2zM14 16a2 2 0 012-2h2a2 2 0 012 2v2a2 2 0 01-2 2h-2a2 2 0 01-2-2v-2z" />
+          </svg>
+          <span>Insights & Analytics</span>
+        </button>
+      </div>
+
+      <!-- Section: Content Collections -->
+      <div>
+        <div class="px-3 mb-2 text-[10px] font-bold uppercase tracking-wider text-[#64748B] flex items-center justify-between">
+          <span>Collections</span>
+          <span class="text-[9px] text-blue-600 font-mono">SQLite 3</span>
+        </div>
+
+        <div class="space-y-1">
+          <!-- Articles -->
+          <button 
+            (click)="activeSection.set('articles')"
+            [class.bg-blue-50]="activeSection() === 'articles'"
+            [class.text-blue-600]="activeSection() === 'articles'"
+            [class.font-semibold]="activeSection() === 'articles'"
+            [class.text-[#64748B]]="activeSection() !== 'articles'"
+            [class.hover:bg-slate-50]="activeSection() !== 'articles'"
+            [class.hover:text-[#1E293B]]="activeSection() !== 'articles'"
+            class="w-full flex items-center justify-between px-3 py-2 rounded-lg text-xs transition-colors text-left">
+            <div class="flex items-center gap-3">
+              <svg class="w-4 h-4 text-blue-600" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 20H5a2 2 0 01-2-2V6a2 2 0 012-2h10a2 2 0 012 2v1m2 13a2 2 0 01-2-2V7m2 13a2 2 0 002-2V9a2 2 0 00-2-2h-2m-4-3H9M7 16h6M7 8h6v4H7V8z" />
+              </svg>
+              <span>Tutorials & Guides</span>
+            </div>
+            <span class="px-1.5 py-0.5 rounded text-[10px] font-mono bg-slate-100 text-[#1E293B]">
+              {{ articles().length }}
+            </span>
+          </button>
+
+          <!-- Services (Core Topics) -->
+          <button 
+            (click)="activeSection.set('services')"
+            [class.bg-blue-50]="activeSection() === 'services'"
+            [class.text-blue-600]="activeSection() === 'services'"
+            [class.font-semibold]="activeSection() === 'services'"
+            [class.text-[#64748B]]="activeSection() !== 'services'"
+            [class.hover:bg-slate-50]="activeSection() !== 'services'"
+            [class.hover:text-[#1E293B]]="activeSection() !== 'services'"
+            class="w-full flex items-center justify-between px-3 py-2 rounded-lg text-xs transition-colors text-left">
+            <div class="flex items-center gap-3">
+              <svg class="w-4 h-4 text-[#E11D48]" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 10V3L4 14h7v7l9-11h-7z" />
+              </svg>
+              <span>Foundational Topics</span>
+            </div>
+            <span class="px-1.5 py-0.5 rounded text-[10px] font-mono bg-slate-100 text-[#1E293B]">
+              {{ services().length }}
+            </span>
+          </button>
+
+          <!-- Team -->
+          <button 
+            (click)="activeSection.set('team')"
+            [class.bg-blue-50]="activeSection() === 'team'"
+            [class.text-blue-600]="activeSection() === 'team'"
+            [class.font-semibold]="activeSection() === 'team'"
+            [class.text-[#64748B]]="activeSection() !== 'team'"
+            [class.hover:bg-slate-50]="activeSection() !== 'team'"
+            [class.hover:text-[#1E293B]]="activeSection() !== 'team'"
+            class="w-full flex items-center justify-between px-3 py-2 rounded-lg text-xs transition-colors text-left">
+            <div class="flex items-center gap-3">
+              <svg class="w-4 h-4 text-amber-500" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4.354a4 4 0 110 5.292M15 21H3v-1a6 6 0 0112 0v1zm0 0h6v-1a6 6 0 00-9-5.197M13 7a4 4 0 11-8 0 4 4 0 018 0z" />
+              </svg>
+              <span>Instructors & Lab</span>
+            </div>
+            <span class="px-1.5 py-0.5 rounded text-[10px] font-mono bg-slate-100 text-[#1E293B]">
+              {{ team().length }}
+            </span>
+          </button>
+
+          <!-- Inquiries -->
+          <button 
+            (click)="activeSection.set('inquiries')"
+            [class.bg-blue-50]="activeSection() === 'inquiries'"
+            [class.text-blue-600]="activeSection() === 'inquiries'"
+            [class.font-semibold]="activeSection() === 'inquiries'"
+            [class.text-[#64748B]]="activeSection() !== 'inquiries'"
+            [class.hover:bg-slate-50]="activeSection() !== 'inquiries'"
+            [class.hover:text-[#1E293B]]="activeSection() !== 'inquiries'"
+            class="w-full flex items-center justify-between px-3 py-2 rounded-lg text-xs transition-colors text-left">
+            <div class="flex items-center gap-3">
+              <svg class="w-4 h-4 text-[#DC2626]" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 8l7.89 5.26a2 2 0 002.22 0L21 8M5 19h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z" />
+              </svg>
+              <span>Demo Bookings</span>
+            </div>
+            @if (stats()?.overview?.newInquiries) {
+              <span class="px-1.5 py-0.5 rounded text-[10px] font-bold bg-red-100 text-[#DC2626]">
+                {{ stats()?.overview?.newInquiries }} NEW
+              </span>
+            } @else {
+              <span class="px-1.5 py-0.5 rounded text-[10px] font-mono bg-slate-100 text-[#1E293B]">
+                {{ inquiries().length }}
+              </span>
+            }
+          </button>
+        </div>
+      </div>
+
+      <!-- Section: Platform Tools -->
+      <div>
+        <div class="px-3 mb-2 text-[10px] font-bold uppercase tracking-wider text-[#64748B]">Platform & Database</div>
+        
+        <div class="space-y-1">
+          <!-- Media Library -->
+          <button 
+            (click)="activeSection.set('media')"
+            [class.bg-blue-50]="activeSection() === 'media'"
+            [class.text-blue-600]="activeSection() === 'media'"
+            [class.font-semibold]="activeSection() === 'media'"
+            [class.text-[#64748B]]="activeSection() !== 'media'"
+            [class.hover:bg-slate-50]="activeSection() !== 'media'"
+            [class.hover:text-[#1E293B]]="activeSection() !== 'media'"
+            class="w-full flex items-center gap-3 px-3 py-2 rounded-lg text-xs transition-colors text-left">
+            <svg class="w-4 h-4 text-blue-500" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 16l4.586-4.586a2 2 0 012.828 0L16 16m-2-2l1.586-1.586a2 2 0 012.828 0L20 14m-6-6h.01M6 20h12a2 2 0 002-2V6a2 2 0 00-2-2H6a2 2 0 00-2 2v12a2 2 0 002 2z" />
+            </svg>
+            <span>Media & Schematics</span>
+          </button>
+
+          <!-- Schema Studio -->
+          <button 
+            (click)="activeSection.set('schema')"
+            [class.bg-blue-50]="activeSection() === 'schema'"
+            [class.text-blue-600]="activeSection() === 'schema'"
+            [class.font-semibold]="activeSection() === 'schema'"
+            [class.text-[#64748B]]="activeSection() !== 'schema'"
+            [class.hover:bg-slate-50]="activeSection() !== 'schema'"
+            [class.hover:text-[#1E293B]]="activeSection() !== 'schema'"
+            class="w-full flex items-center gap-3 px-3 py-2 rounded-lg text-xs transition-colors text-left">
+            <svg class="w-4 h-4 text-teal-600" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 7v10c0 2.21 3.582 4 8 4s8-1.79 8-4V7M4 7c0 2.21 3.582 4 8 4s8-1.79 8-4M4 7c0-2.21 3.582-4 8-4s8 1.79 8 4m0 5c0 2.21-3.582 4-8 4s-8-1.79-8-4" />
+            </svg>
+            <span>SQLite Schema Studio</span>
+          </button>
+
+          <!-- Feathers API Explorer -->
+          <button 
+            (click)="activeSection.set('api-explorer')"
+            [class.bg-blue-50]="activeSection() === 'api-explorer'"
+            [class.text-blue-600]="activeSection() === 'api-explorer'"
+            [class.font-semibold]="activeSection() === 'api-explorer'"
+            [class.text-[#64748B]]="activeSection() !== 'api-explorer'"
+            [class.hover:bg-slate-50]="activeSection() !== 'api-explorer'"
+            [class.hover:text-[#1E293B]]="activeSection() !== 'api-explorer'"
+            class="w-full flex items-center gap-3 px-3 py-2 rounded-lg text-xs transition-colors text-left">
+            <svg class="w-4 h-4 text-purple-600" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 20l4-16m4 4l4 4-4 4M6 16l-4-4 4-4" />
+            </svg>
+            <span>Feathers REST Explorer</span>
+          </button>
+
+          <!-- Settings -->
+          <button 
+            (click)="activeSection.set('settings')"
+            [class.bg-blue-50]="activeSection() === 'settings'"
+            [class.text-blue-600]="activeSection() === 'settings'"
+            [class.font-semibold]="activeSection() === 'settings'"
+            [class.text-[#64748B]]="activeSection() !== 'settings'"
+            [class.hover:bg-slate-50]="activeSection() !== 'settings'"
+            [class.hover:text-[#1E293B]]="activeSection() !== 'settings'"
+            class="w-full flex items-center gap-3 px-3 py-2 rounded-lg text-xs transition-colors text-left">
+            <svg class="w-4 h-4 text-[#64748B]" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10.325 4.317c.426-1.756 2.924-1.756 3.35 0a1.724 1.724 0 002.573 1.066c1.543-.94 3.31.826 2.37 2.37a1.724 1.724 0 001.065 2.572c1.756.426 1.756 2.924 0 3.35a1.724 1.724 0 00-1.066 2.573c.94 1.543-.826 3.31-2.37 2.37a1.724 1.724 0 00-2.572 1.065c-.426 1.756-2.924 1.756-3.35 0a1.724 1.724 0 00-2.573-1.066c-1.543.94-3.31-.826-2.37-2.37a1.724 1.724 0 00-1.065-2.572c-1.756-.426-1.756-2.924 0-3.35a1.724 1.724 0 001.066-2.573c-.94-1.543.826-3.31 2.37-2.37.996.608 2.296.07 2.572-1.065z" />
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 12a3 3 0 11-6 0 3 3 0 016 0z" />
+            </svg>
+            <span>Settings Singleton</span>
+          </button>
+        </div>
+      </div>
+
+    </div>
+
+    <!-- Bottom Actions & Public Website Switch -->
+    <div class="p-3 border-t border-[#E2E8F0] bg-[#F8FAFC] space-y-2">
+      <button 
+        (click)="switchToWebsite.emit()"
+        class="w-full flex items-center justify-center gap-2 py-2 px-3 rounded-lg bg-white hover:bg-slate-50 text-[#1E293B] text-xs font-semibold border border-[#E2E8F0] shadow-2xs transition-all">
+        <svg class="w-4 h-4 text-blue-600" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 6H6a2 2 0 00-2 2v10a2 2 0 002 2h10a2 2 0 002-2v-4M14 4h6m0 0v6m0-6L10 14" />
+        </svg>
+        <span>View Public Website</span>
+      </button>
+
+      <div class="flex items-center justify-between text-[11px] px-1 text-[#64748B]">
+        <div class="flex items-center gap-1.5">
+          <span class="w-2 h-2 rounded-full" [class.bg-[#16A34A]]="serverStatus().status === 'ONLINE'" [class.bg-[#D97706]]="serverStatus().status !== 'ONLINE'"></span>
+          <span>Feathers Core</span>
+        </div>
+        <span class="font-mono text-[#64748B]">SQLite 3 (WAL)</span>
+      </div>
+    </div>
+
+  </aside>
+
+  <!-- ================= MAIN STUDIO WORKSPACE ================= -->
+  <main class="flex-1 flex flex-col min-w-0 bg-[#F8FAFC] overflow-hidden">
+    
+    <!-- Top Action Bar -->
+    <header class="h-16 px-6 border-b border-[#E2E8F0] bg-white flex items-center justify-between shrink-0 shadow-2xs">
+      
+      <!-- Breadcrumb -->
+      <div class="flex items-center gap-2 text-xs">
+        <span class="text-[#64748B] font-medium">Directus Studio</span>
+        <span class="text-slate-300">/</span>
+        <span class="text-[#1E293B] font-bold capitalize">{{ activeSection().replace('-', ' ') }}</span>
+      </div>
+
+      <!-- Controls -->
+      <div class="flex items-center gap-3">
+        
+        <!-- Search bar -->
+        @if (['articles', 'services', 'team', 'inquiries'].includes(activeSection())) {
+          <div class="relative w-48 sm:w-64">
+            <svg class="w-3.5 h-3.5 text-[#64748B] absolute left-3 top-1/2 -translate-y-1/2" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z" />
+            </svg>
+            <input 
+              type="text" 
+              [ngModel]="searchQuery()"
+              (ngModelChange)="searchQuery.set($event)"
+              placeholder="Search records..."
+              class="w-full pl-8 pr-3 py-1.5 bg-[#F8FAFC] border border-[#E2E8F0] rounded-lg text-xs text-[#1E293B] placeholder-slate-400 focus:outline-none focus:border-blue-600 focus:bg-white">
+          </div>
+
+          <!-- Status Filter -->
+          <select 
+            [ngModel]="statusFilter()"
+            (ngModelChange)="statusFilter.set($event)"
+            class="px-2.5 py-1.5 bg-white border border-[#E2E8F0] rounded-lg text-xs text-[#1E293B] focus:outline-none focus:border-blue-600">
+            <option value="all">All Statuses</option>
+            <option value="published">Published</option>
+            <option value="draft">Draft</option>
+            <option value="archived">Archived</option>
+            <option value="new">New</option>
+          </select>
+        }
+
+        <!-- Refresh button -->
+        <button 
+          (click)="refreshAll()" 
+          title="Refresh collections"
+          class="p-2 rounded-lg bg-white hover:bg-slate-50 border border-[#E2E8F0] text-[#64748B] hover:text-[#1E293B] transition-colors shadow-2xs">
+          <svg class="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 4v5h.582m15.356 2A8.001 8.001 0 004.582 9m0 0H9m11 11v-5h-.581m0 0a8.003 8.003 0 01-15.357-2m15.357 2H15" />
+          </svg>
+        </button>
+
+        <!-- Create Button -->
+        @if (['articles', 'services', 'team', 'inquiries'].includes(activeSection())) {
+          <button 
+            (click)="openCreateModal(activeSection())"
+            class="flex items-center gap-1.5 px-3.5 py-1.5 rounded-lg bg-blue-600 hover:bg-blue-700 text-white text-xs font-semibold shadow-xs transition-all">
+            <svg class="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" d="M12 4v16m8-8H4" />
+            </svg>
+            <span>Create Item</span>
+          </button>
+        }
+
+        @if (activeSection() === 'media') {
+          <button 
+            (click)="uploadModalOpen.set(true)"
+            class="flex items-center gap-1.5 px-3.5 py-1.5 rounded-lg bg-blue-600 hover:bg-blue-700 text-white text-xs font-semibold shadow-xs transition-all">
+            <svg class="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-8l-4-4m0 0L8 8m4-4v12" />
+            </svg>
+            <span>Upload Asset</span>
+          </button>
+        }
+      </div>
+
+    </header>
+
+    <!-- Studio Content Body -->
+    <div class="flex-1 overflow-y-auto p-6">
+
+      <!-- ================= 1. INSIGHTS DASHBOARD ================= -->
+      @if (activeSection() === 'dashboard') {
+        <div class="space-y-6 max-w-7xl mx-auto">
+          
+          <!-- Banner -->
+          <div class="p-6 rounded-2xl bg-white border border-[#E2E8F0] shadow-sm flex flex-col md:flex-row md:items-center justify-between gap-4">
+            <div>
+              <span class="text-[10px] font-bold uppercase tracking-wider text-blue-600">Educational Studio Operations</span>
+              <h2 class="text-xl font-bold text-[#1E293B] mt-0.5 font-display">Node-RED Platform Management & Telemetry Sinks</h2>
+              <p class="text-xs text-[#64748B] mt-1">FeathersJS REST/Socket.io backend servicing SQLite persistence with real-time audit logging.</p>
+            </div>
+            <div class="flex items-center gap-2">
+              <button (click)="openCreateModal('articles')" class="px-3.5 py-2 rounded-lg bg-blue-600 hover:bg-blue-700 text-white text-xs font-semibold shadow-xs transition-all">
+                + New Tutorial
+              </button>
+              <button (click)="activeSection.set('api-explorer')" class="px-3.5 py-2 rounded-lg bg-white hover:bg-slate-50 border border-[#E2E8F0] text-[#1E293B] text-xs font-semibold shadow-xs transition-all">
+                REST Tester
+              </button>
+            </div>
+          </div>
+
+          <!-- Top Metrics Cards -->
+          <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
+            
+            <div class="p-5 rounded-xl bg-white border border-[#E2E8F0] shadow-sm flex items-center justify-between">
+              <div>
+                <div class="text-xs text-[#64748B] font-medium">Tutorials & Guides</div>
+                <div class="text-2xl font-bold text-[#1E293B] font-display mt-1">{{ stats()?.overview?.articles || articles().length }}</div>
+                <div class="text-[11px] text-blue-600 mt-1">{{ stats()?.overview?.publishedArticles || 0 }} Published</div>
+              </div>
+              <div class="w-12 h-12 rounded-xl bg-blue-50 border border-blue-200 flex items-center justify-center text-blue-600">
+                <svg class="w-6 h-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                  <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 20H5a2 2 0 01-2-2V6a2 2 0 012-2h10a2 2 0 012 2v1m2 13a2 2 0 01-2-2V7m2 13a2 2 0 002-2V9a2 2 0 00-2-2h-2m-4-3H9M7 16h6M7 8h6v4H7V8z" />
+                </svg>
+              </div>
+            </div>
+
+            <div class="p-5 rounded-xl bg-white border border-[#E2E8F0] shadow-sm flex items-center justify-between">
+              <div>
+                <div class="text-xs text-[#64748B] font-medium">Core Topics</div>
+                <div class="text-2xl font-bold text-[#E11D48] font-display mt-1">{{ stats()?.overview?.services || services().length }}</div>
+                <div class="text-[11px] text-[#64748B] mt-1">Modules Active</div>
+              </div>
+              <div class="w-12 h-12 rounded-xl bg-rose-50 border border-rose-200 flex items-center justify-center text-[#E11D48]">
+                <svg class="w-6 h-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                  <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 10V3L4 14h7v7l9-11h-7z" />
+                </svg>
+              </div>
+            </div>
+
+            <div class="p-5 rounded-xl bg-white border border-[#E2E8F0] shadow-sm flex items-center justify-between">
+              <div>
+                <div class="text-xs text-[#64748B] font-medium">Demo Bookings</div>
+                <div class="text-2xl font-bold text-[#DC2626] font-display mt-1">{{ stats()?.overview?.inquiries || inquiries().length }}</div>
+                <div class="text-[11px] text-red-600 mt-1">{{ stats()?.overview?.newInquiries || 0 }} Unreviewed</div>
+              </div>
+              <div class="w-12 h-12 rounded-xl bg-red-50 border border-red-200 flex items-center justify-center text-[#DC2626]">
+                <svg class="w-6 h-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                  <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 8l7.89 5.26a2 2 0 002.22 0L21 8M5 19h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z" />
+                </svg>
+              </div>
+            </div>
+
+            <div class="p-5 rounded-xl bg-white border border-[#E2E8F0] shadow-sm flex items-center justify-between">
+              <div>
+                <div class="text-xs text-[#64748B] font-medium">Schematics & Media</div>
+                <div class="text-2xl font-bold text-teal-700 font-display mt-1">{{ stats()?.overview?.media || media().length }}</div>
+                <div class="text-[11px] text-teal-600 mt-1">SQLite Cataloged</div>
+              </div>
+              <div class="w-12 h-12 rounded-xl bg-teal-50 border border-teal-200 flex items-center justify-center text-teal-700">
+                <svg class="w-6 h-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                  <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 16l4.586-4.586a2 2 0 012.828 0L16 16m-2-2l1.586-1.586a2 2 0 012.828 0L20 14m-6-6h.01M6 20h12a2 2 0 002-2V6a2 2 0 00-2-2H6a2 2 0 00-2 2v12a2 2 0 002 2z" />
+                </svg>
+              </div>
+            </div>
+
+          </div>
+
+          <!-- Mid Section: Recent Inquiries + Platform Specs -->
+          <div class="grid grid-cols-1 lg:grid-cols-12 gap-6">
+            
+            <div class="lg:col-span-7 rounded-xl bg-white border border-[#E2E8F0] p-5 shadow-sm">
+              <div class="flex items-center justify-between mb-4">
+                <h3 class="text-sm font-bold text-[#1E293B] font-display flex items-center gap-2">
+                  <svg class="w-4 h-4 text-blue-600" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 8l7.89 5.26a2 2 0 002.22 0L21 8M5 19h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z" />
+                  </svg>
+                  <span>Recent Demonstration Requests</span>
+                </h3>
+                <button (click)="activeSection.set('inquiries')" class="text-xs text-blue-600 hover:text-blue-700 font-semibold">
+                  View All ({{ inquiries().length }})
+                </button>
+              </div>
+
+              <div class="space-y-3">
+                @for (inq of inquiries().slice(0, 4); track inq.id) {
+                  <div class="p-3.5 rounded-lg bg-[#F8FAFC] border border-[#E2E8F0] flex items-start justify-between gap-4">
+                    <div class="space-y-1">
+                      <div class="flex items-center gap-2">
+                        <span class="text-xs font-bold text-[#1E293B]">{{ inq.name }}</span>
+                        <span class="text-[10px] text-[#64748B]">({{ inq.company || 'Lab User' }})</span>
+                        <span class="px-2 py-0.5 rounded text-[10px] font-bold"
+                              [class.bg-red-50]="inq.status === 'new'"
+                              [class.text-[#DC2626]]="inq.status === 'new'"
+                              [class.border-red-200]="inq.status === 'new'"
+                              [class.bg-amber-50]="inq.status === 'in_review'"
+                              [class.text-[#D97706]]="inq.status === 'in_review'"
+                              [class.bg-green-50]="inq.status === 'resolved'"
+                              [class.text-[#16A34A]]="inq.status === 'resolved'">
+                          {{ inq.status }}
+                        </span>
+                      </div>
+                      <div class="text-xs text-[#1E293B] font-medium">{{ inq.subject || inq.service_interest }}</div>
+                      <div class="text-[11px] text-[#64748B] line-clamp-1">{{ inq.message }}</div>
+                    </div>
+
+                    <button (click)="openEditModal('inquiries', inq)" class="px-2.5 py-1 rounded bg-white hover:bg-slate-100 border border-[#E2E8F0] text-xs text-[#1E293B] font-semibold transition-colors shrink-0 shadow-2xs">
+                      Manage
+                    </button>
+                  </div>
+                }
+              </div>
+            </div>
+
+            <!-- Platform Specs -->
+            <div class="lg:col-span-5 rounded-xl bg-white border border-[#E2E8F0] p-5 shadow-sm flex flex-col justify-between">
+              <div>
+                <h3 class="text-sm font-bold text-[#1E293B] font-display mb-4 flex items-center gap-2">
+                  <svg class="w-4 h-4 text-blue-600" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 11H5m14 0a2 2 0 012 2v6a2 2 0 01-2 2H5a2 2 0 01-2-2v-6a2 2 0 012-2m14 0V9a2 2 0 00-2-2M5 11V9a2 2 0 012-2m0 0V5a2 2 0 012-2h6a2 2 0 012 2v2M7 7h10" />
+                  </svg>
+                  <span>Backend Platform Specifications</span>
+                </h3>
+
+                <div class="space-y-3 text-xs">
+                  <div class="flex items-center justify-between pb-2 border-b border-[#E2E8F0]">
+                    <span class="text-[#64748B]">CMS Platform</span>
+                    <span class="font-bold text-[#1E293B]">Directus Data Studio</span>
+                  </div>
+                  <div class="flex items-center justify-between pb-2 border-b border-[#E2E8F0]">
+                    <span class="text-[#64748B]">Backend Framework</span>
+                    <span class="font-bold text-blue-600">FeathersJS 5.0 Core</span>
+                  </div>
+                  <div class="flex items-center justify-between pb-2 border-b border-[#E2E8F0]">
+                    <span class="text-[#64748B]">Database Engine</span>
+                    <span class="font-bold text-[#16A34A]">SQLite 3 (WAL mode)</span>
+                  </div>
+                  <div class="flex items-center justify-between pb-2 border-b border-[#E2E8F0]">
+                    <span class="text-[#64748B]">ORM Adapter</span>
+                    <span class="font-bold text-[#1E293B]">Knex.js Query Builder</span>
+                  </div>
+                  <div class="flex items-center justify-between">
+                    <span class="text-[#64748B]">Real-Time Transport</span>
+                    <span class="font-bold text-purple-600">Socket.io Channels</span>
+                  </div>
+                </div>
+              </div>
+
+              <div class="mt-6 pt-4 border-t border-[#E2E8F0] flex items-center justify-between">
+                <span class="text-[11px] text-[#64748B]">REST Host: http://localhost:3030</span>
+                <button (click)="activeSection.set('schema')" class="text-xs text-blue-600 hover:text-blue-700 font-bold">
+                  Inspect SQLite Schema →
+                </button>
+              </div>
+            </div>
+
+          </div>
+
+          <!-- Activity Audit Stream -->
+          <div class="rounded-xl bg-white border border-[#E2E8F0] p-5 shadow-sm">
+            <h3 class="text-sm font-bold text-[#1E293B] font-display mb-4 flex items-center gap-2">
+              <svg class="w-4 h-4 text-[#16A34A]" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z" />
+              </svg>
+              <span>Recent Activity Stream</span>
+            </h3>
+
+            <div class="space-y-2">
+              @for (act of activity().slice(0, 5); track act.id) {
+                <div class="flex items-center justify-between p-3 rounded-lg bg-[#F8FAFC] border border-[#E2E8F0] text-xs">
+                  <div class="flex items-center gap-3">
+                    <span class="px-2 py-0.5 rounded text-[10px] font-bold"
+                          [class.bg-blue-100]="act.action === 'CREATE'"
+                          [class.text-blue-700]="act.action === 'CREATE'"
+                          [class.bg-slate-200]="act.action === 'UPDATE'"
+                          [class.text-slate-800]="act.action === 'UPDATE'"
+                          [class.bg-red-100]="act.action === 'DELETE'"
+                          [class.text-red-700]="act.action === 'DELETE'">
+                      {{ act.action }}
+                    </span>
+                    <span class="text-[#1E293B] font-medium">{{ act.item_title }}</span>
+                    <span class="text-[#64748B]">in {{ act.collection }}</span>
+                  </div>
+                  <span class="text-[#64748B] text-[11px] font-mono">{{ act.user }}</span>
+                </div>
+              }
+            </div>
+          </div>
+
+        </div>
+      }
+
+      <!-- ================= 2. ARTICLES (TUTORIALS) COLLECTION ================= -->
+      @if (activeSection() === 'articles') {
+        <div class="space-y-4 max-w-7xl mx-auto">
+          <div class="flex items-center justify-between pb-2">
+            <div>
+              <h2 class="text-lg font-bold text-[#1E293B] font-display">Tutorials & Guides Collection</h2>
+              <p class="text-xs text-[#64748B]">Total items: {{ filteredArticles().length }} records</p>
+            </div>
+          </div>
+
+          <div class="rounded-xl bg-white border border-[#E2E8F0] overflow-hidden shadow-sm">
+            <div class="overflow-x-auto">
+              <table class="w-full text-left text-xs">
+                <thead class="bg-[#F8FAFC] border-b border-[#E2E8F0] text-[#64748B] uppercase font-semibold text-[10px] tracking-wider">
+                  <tr>
+                    <th class="py-3 px-4 w-12">ID</th>
+                    <th class="py-3 px-4">Title</th>
+                    <th class="py-3 px-4">Category</th>
+                    <th class="py-3 px-4">Author</th>
+                    <th class="py-3 px-4">Status</th>
+                    <th class="py-3 px-4">Views</th>
+                    <th class="py-3 px-4 text-right">Actions</th>
+                  </tr>
+                </thead>
+                <tbody class="divide-y divide-[#E2E8F0]">
+                  @for (art of filteredArticles(); track art.id) {
+                    <tr class="hover:bg-slate-50 transition-colors">
+                      <td class="py-3.5 px-4 font-mono text-[#64748B]">#{{ art.id }}</td>
+                      <td class="py-3.5 px-4">
+                        <div class="font-bold text-[#1E293B]">{{ art.title }}</div>
+                        <div class="text-[11px] text-[#64748B] line-clamp-1">{{ art.excerpt }}</div>
+                      </td>
+                      <td class="py-3.5 px-4">
+                        <span class="px-2 py-0.5 rounded text-[11px] font-semibold bg-blue-50 text-blue-700 border border-blue-200">
+                          {{ art.category }}
+                        </span>
+                      </td>
+                      <td class="py-3.5 px-4 text-[#1E293B] font-medium">{{ art.author_name }}</td>
+                      <td class="py-3.5 px-4">
+                        <button 
+                          (click)="updateQuickStatus('articles', art, art.status === 'published' ? 'draft' : 'published')"
+                          class="px-2 py-0.5 rounded-full text-[10px] font-bold flex items-center gap-1.5"
+                          [class.bg-green-50]="art.status === 'published'"
+                          [class.text-[#16A34A]]="art.status === 'published'"
+                          [class.border-green-200]="art.status === 'published'"
+                          [class.bg-amber-50]="art.status === 'draft'"
+                          [class.text-[#D97706]]="art.status === 'draft'">
+                          <span class="w-1.5 h-1.5 rounded-full" [class.bg-[#16A34A]]="art.status === 'published'" [class.bg-[#D97706]]="art.status === 'draft'"></span>
+                          <span class="capitalize">{{ art.status }}</span>
+                        </button>
+                      </td>
+                      <td class="py-3.5 px-4 font-mono text-[#64748B]">{{ art.views || 0 }}</td>
+                      <td class="py-3.5 px-4 text-right space-x-1">
+                        <button (click)="openEditModal('articles', art)" class="p-1.5 rounded-lg bg-slate-100 hover:bg-blue-600 hover:text-white text-[#1E293B] transition-colors">
+                          <svg class="w-3.5 h-3.5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15.232 5.232l3.536 3.536m-2.036-5.036a2.5 2.5 0 113.536 3.536L6.5 21.036H3v-3.572L16.732 3.732z" />
+                          </svg>
+                        </button>
+                        <button (click)="art.id && deleteItem('articles', art.id)" class="p-1.5 rounded-lg bg-slate-100 hover:bg-red-600 hover:text-white text-[#1E293B] transition-colors">
+                          <svg class="w-3.5 h-3.5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16" />
+                          </svg>
+                        </button>
+                      </td>
+                    </tr>
+                  }
+                </tbody>
+              </table>
+            </div>
+          </div>
+        </div>
+      }
+
+      <!-- ================= 3. SERVICES (FOUNDATIONAL TOPICS) ================= -->
+      @if (activeSection() === 'services') {
+        <div class="space-y-4 max-w-7xl mx-auto">
+          <div class="flex items-center justify-between pb-2">
+            <div>
+              <h2 class="text-lg font-bold text-[#1E293B] font-display">Foundational Topics Collection</h2>
+              <p class="text-xs text-[#64748B]">Total items: {{ filteredServices().length }} records</p>
+            </div>
+          </div>
+
+          <div class="rounded-xl bg-white border border-[#E2E8F0] overflow-hidden shadow-sm">
+            <div class="overflow-x-auto">
+              <table class="w-full text-left text-xs">
+                <thead class="bg-[#F8FAFC] border-b border-[#E2E8F0] text-[#64748B] uppercase font-semibold text-[10px] tracking-wider">
+                  <tr>
+                    <th class="py-3 px-4 w-12">ID</th>
+                    <th class="py-3 px-4">Topic Title</th>
+                    <th class="py-3 px-4">Category</th>
+                    <th class="py-3 px-4">Badge</th>
+                    <th class="py-3 px-4">Status</th>
+                    <th class="py-3 px-4 text-right">Actions</th>
+                  </tr>
+                </thead>
+                <tbody class="divide-y divide-[#E2E8F0]">
+                  @for (srv of filteredServices(); track srv.id) {
+                    <tr class="hover:bg-slate-50 transition-colors">
+                      <td class="py-3.5 px-4 font-mono text-[#64748B]">#{{ srv.id }}</td>
+                      <td class="py-3.5 px-4">
+                        <div class="font-bold text-[#1E293B]">{{ srv.title }}</div>
+                        <div class="text-[11px] text-[#64748B] line-clamp-1">{{ srv.short_description }}</div>
+                      </td>
+                      <td class="py-3.5 px-4 text-[#1E293B]">{{ srv.category }}</td>
+                      <td class="py-3.5 px-4">
+                        <span class="px-2 py-0.5 rounded text-[10px] font-bold bg-slate-100 text-[#1E293B] border border-slate-200">
+                          {{ srv.badge }}
+                        </span>
+                      </td>
+                      <td class="py-3.5 px-4">
+                        <span class="px-2 py-0.5 rounded-full text-[10px] font-bold bg-green-50 text-[#16A34A] border border-green-200">
+                          {{ srv.status }}
+                        </span>
+                      </td>
+                      <td class="py-3.5 px-4 text-right space-x-1">
+                        <button (click)="openEditModal('services', srv)" class="p-1.5 rounded-lg bg-slate-100 hover:bg-blue-600 hover:text-white text-[#1E293B] transition-colors">
+                          <svg class="w-3.5 h-3.5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15.232 5.232l3.536 3.536m-2.036-5.036a2.5 2.5 0 113.536 3.536L6.5 21.036H3v-3.572L16.732 3.732z" />
+                          </svg>
+                        </button>
+                        <button (click)="srv.id && deleteItem('services', srv.id)" class="p-1.5 rounded-lg bg-slate-100 hover:bg-red-600 hover:text-white text-[#1E293B] transition-colors">
+                          <svg class="w-3.5 h-3.5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16" />
+                          </svg>
+                        </button>
+                      </td>
+                    </tr>
+                  }
+                </tbody>
+              </table>
+            </div>
+          </div>
+        </div>
+      }
+
+      <!-- ================= 4. TEAM ================= -->
+      @if (activeSection() === 'team') {
+        <div class="space-y-4 max-w-7xl mx-auto">
+          <div class="flex items-center justify-between pb-2">
+            <div>
+              <h2 class="text-lg font-bold text-[#1E293B] font-display">Instructors & Researchers Collection</h2>
+              <p class="text-xs text-[#64748B]">Total items: {{ filteredTeam().length }} records</p>
+            </div>
+          </div>
+
+          <div class="grid grid-cols-1 md:grid-cols-3 gap-4">
+            @for (member of filteredTeam(); track member.id) {
+              <div class="p-5 rounded-xl bg-white border border-[#E2E8F0] shadow-sm flex items-start gap-4">
+                <img [src]="member.avatar" class="w-12 h-12 rounded-xl object-cover border border-[#E2E8F0] shrink-0">
+                <div class="flex-1 min-w-0">
+                  <div class="flex items-center justify-between">
+                    <h4 class="text-xs font-bold text-[#1E293B] truncate">{{ member.name }}</h4>
+                    <span class="text-[10px] font-bold text-blue-600 bg-blue-50 px-1.5 py-0.5 rounded border border-blue-200">{{ member.department }}</span>
+                  </div>
+                  <p class="text-[11px] text-[#64748B] mt-0.5">{{ member.role }}</p>
+                  <p class="text-[11px] text-[#64748B] mt-2 line-clamp-2 leading-relaxed">{{ member.bio }}</p>
+                  
+                  <div class="flex items-center justify-between mt-3 pt-2.5 border-t border-[#E2E8F0]">
+                    <span class="text-[10px] text-[#64748B] truncate">{{ member.email }}</span>
+                    <div class="flex items-center gap-1 shrink-0">
+                      <button (click)="openEditModal('team', member)" class="p-1 rounded bg-slate-100 hover:bg-blue-600 hover:text-white text-[#1E293B]">
+                        <svg class="w-3.5 h-3.5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15.232 5.232l3.536 3.536m-2.036-5.036a2.5 2.5 0 113.536 3.536L6.5 21.036H3v-3.572L16.732 3.732z" />
+                        </svg>
+                      </button>
+                      <button (click)="member.id && deleteItem('team', member.id)" class="p-1 rounded bg-slate-100 hover:bg-red-600 hover:text-white text-[#1E293B]">
+                        <svg class="w-3.5 h-3.5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16" />
+                        </svg>
+                      </button>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            }
+          </div>
+        </div>
+      }
+
+      <!-- ================= 5. INQUIRIES ================= -->
+      @if (activeSection() === 'inquiries') {
+        <div class="space-y-4 max-w-7xl mx-auto">
+          <div class="flex items-center justify-between pb-2">
+            <div>
+              <h2 class="text-lg font-bold text-[#1E293B] font-display">Demonstration Bookings Collection</h2>
+              <p class="text-xs text-[#64748B]">Total incoming requests: {{ filteredInquiries().length }}</p>
+            </div>
+          </div>
+
+          <div class="rounded-xl bg-white border border-[#E2E8F0] overflow-hidden shadow-sm">
+            <div class="overflow-x-auto">
+              <table class="w-full text-left text-xs">
+                <thead class="bg-[#F8FAFC] border-b border-[#E2E8F0] text-[#64748B] uppercase font-semibold text-[10px] tracking-wider">
+                  <tr>
+                    <th class="py-3 px-4 w-12">ID</th>
+                    <th class="py-3 px-4">Contact & Lab</th>
+                    <th class="py-3 px-4">Topic Requested</th>
+                    <th class="py-3 px-4">Message Snippet</th>
+                    <th class="py-3 px-4">Priority</th>
+                    <th class="py-3 px-4">Status</th>
+                    <th class="py-3 px-4 text-right">Actions</th>
+                  </tr>
+                </thead>
+                <tbody class="divide-y divide-[#E2E8F0]">
+                  @for (inq of filteredInquiries(); track inq.id) {
+                    <tr class="hover:bg-slate-50 transition-colors">
+                      <td class="py-3.5 px-4 font-mono text-[#64748B]">#{{ inq.id }}</td>
+                      <td class="py-3.5 px-4">
+                        <div class="font-bold text-[#1E293B]">{{ inq.name }}</div>
+                        <div class="text-[11px] text-[#64748B]">{{ inq.email }}</div>
+                      </td>
+                      <td class="py-3.5 px-4 text-[#1E293B] font-medium">{{ inq.service_interest }}</td>
+                      <td class="py-3.5 px-4 max-w-xs text-[#64748B] line-clamp-2">{{ inq.message }}</td>
+                      <td class="py-3.5 px-4">
+                        <span class="px-2 py-0.5 rounded text-[10px] font-bold"
+                              [class.bg-red-50]="inq.priority === 'urgent'"
+                              [class.text-[#DC2626]]="inq.priority === 'urgent'"
+                              [class.bg-amber-50]="inq.priority === 'high'"
+                              [class.text-[#D97706]]="inq.priority === 'high'"
+                              [class.bg-slate-100]="inq.priority === 'normal'"
+                              [class.text-[#64748B]]="inq.priority === 'normal'">
+                          {{ inq.priority }}
+                        </span>
+                      </td>
+                      <td class="py-3.5 px-4">
+                        <select 
+                          [ngModel]="inq.status"
+                          (ngModelChange)="updateQuickStatus('inquiries', inq, $event)"
+                          class="px-2 py-1 bg-white border border-[#E2E8F0] rounded text-[11px] text-[#1E293B] focus:outline-none focus:border-blue-600">
+                          <option value="new">New</option>
+                          <option value="in_review">In Review</option>
+                          <option value="contacted">Contacted</option>
+                          <option value="resolved">Resolved</option>
+                        </select>
+                      </td>
+                      <td class="py-3.5 px-4 text-right space-x-1">
+                        <button (click)="openEditModal('inquiries', inq)" class="p-1.5 rounded-lg bg-slate-100 hover:bg-blue-600 hover:text-white text-[#1E293B] transition-colors">
+                          <svg class="w-3.5 h-3.5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15.232 5.232l3.536 3.536m-2.036-5.036a2.5 2.5 0 113.536 3.536L6.5 21.036H3v-3.572L16.732 3.732z" />
+                          </svg>
+                        </button>
+                        <button (click)="inq.id && deleteItem('inquiries', inq.id)" class="p-1.5 rounded-lg bg-slate-100 hover:bg-red-600 hover:text-white text-[#1E293B] transition-colors">
+                          <svg class="w-3.5 h-3.5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16" />
+                          </svg>
+                        </button>
+                      </td>
+                    </tr>
+                  }
+                </tbody>
+              </table>
+            </div>
+          </div>
+        </div>
+      }
+
+      <!-- ================= 6. MEDIA LIBRARY ================= -->
+      @if (activeSection() === 'media') {
+        <div class="space-y-4 max-w-7xl mx-auto">
+          <div class="flex items-center justify-between pb-2">
+            <div>
+              <h2 class="text-lg font-bold text-[#1E293B] font-display">Media & Schematics Library</h2>
+              <p class="text-xs text-[#64748B]">Total cataloged assets: {{ media().length }} files</p>
+            </div>
+          </div>
+
+          <div class="grid grid-cols-2 sm:grid-cols-4 gap-4">
+            @for (m of media(); track m.id) {
+              <div class="rounded-xl bg-white border border-[#E2E8F0] overflow-hidden shadow-xs flex flex-col justify-between">
+                <div class="relative h-36 bg-slate-100 overflow-hidden">
+                  <img [src]="m.url" [alt]="m.title" class="w-full h-full object-cover">
+                  <span class="absolute top-2 left-2 px-2 py-0.5 rounded text-[10px] font-bold bg-white/90 text-[#1E293B] shadow-2xs">
+                    {{ m.folder }}
+                  </span>
+                </div>
+                <div class="p-3">
+                  <div class="text-xs font-bold text-[#1E293B] truncate">{{ m.title }}</div>
+                  <div class="flex items-center justify-between mt-3 pt-2 border-t border-[#E2E8F0]">
+                    <span class="text-[10px] font-mono text-[#64748B]">{{ (m.file_size / 1024).toFixed(0) }} KB</span>
+                    <button (click)="copyToClipboard(m.url)" class="px-2 py-0.5 rounded bg-slate-100 hover:bg-blue-600 hover:text-white text-[10px] font-semibold text-[#1E293B]">
+                      Copy
+                    </button>
+                  </div>
+                </div>
+              </div>
+            }
+          </div>
+        </div>
+      }
+
+      <!-- ================= 7. DATA MODEL SCHEMA STUDIO ================= -->
+      @if (activeSection() === 'schema') {
+        <div class="space-y-6 max-w-7xl mx-auto">
+          <div class="flex items-center justify-between pb-2">
+            <div>
+              <h2 class="text-lg font-bold text-[#1E293B] font-display">SQLite Data Model & Schema Inspector</h2>
+              <p class="text-xs text-[#64748B]">Dynamic SQL reflection over SQLite tables managed through Knex.</p>
+            </div>
+            <span class="text-xs font-mono text-teal-700 bg-teal-50 px-3 py-1 rounded border border-teal-200">
+              cms.sqlite (WAL Mode)
+            </span>
+          </div>
+
+          <div class="grid grid-cols-1 lg:grid-cols-2 gap-6">
+            @for (col of schema()?.collections; track col.table) {
+              <div class="rounded-xl bg-white border border-[#E2E8F0] shadow-sm overflow-hidden">
+                <div class="p-3.5 bg-[#F8FAFC] border-b border-[#E2E8F0] flex items-center justify-between">
+                  <div class="flex items-center gap-2">
+                    <span class="w-2.5 h-2.5 rounded bg-blue-600"></span>
+                    <span class="text-xs font-bold text-[#1E293B] font-mono">{{ col.table }}</span>
+                  </div>
+                  <span class="text-[11px] font-mono text-[#64748B]">{{ col.itemCount }} records</span>
+                </div>
+
+                <div class="p-4 overflow-x-auto">
+                  <table class="w-full text-left text-xs">
+                    <thead>
+                      <tr class="text-[10px] uppercase font-semibold text-[#64748B] border-b border-[#E2E8F0]">
+                        <th class="pb-2">Column</th>
+                        <th class="pb-2">Type</th>
+                        <th class="pb-2">Nullable</th>
+                        <th class="pb-2">Default</th>
+                      </tr>
+                    </thead>
+                    <tbody class="divide-y divide-[#E2E8F0]">
+                      @for (colKey of getColumnKeys(col.columns); track colKey) {
+                        <tr>
+                          <td class="py-1.5 font-mono text-blue-600 font-bold text-[11px]">{{ colKey }}</td>
+                          <td class="py-1.5 font-mono text-[#1E293B] text-[11px]">{{ col.columns[colKey].type }}</td>
+                          <td class="py-1.5 text-[#64748B] text-[11px]">{{ col.columns[colKey].nullable ? 'YES' : 'NO' }}</td>
+                          <td class="py-1.5 font-mono text-slate-400 text-[11px]">{{ col.columns[colKey].defaultValue ?? 'null' }}</td>
+                        </tr>
+                      }
+                    </tbody>
+                  </table>
+                </div>
+              </div>
+            }
+          </div>
+        </div>
+      }
+
+      <!-- ================= 8. FEATHERS API EXPLORER ================= -->
+      @if (activeSection() === 'api-explorer') {
+        <div class="space-y-6 max-w-7xl mx-auto">
+          <div>
+            <h2 class="text-lg font-bold text-[#1E293B] font-display">FeathersJS REST Service Tester</h2>
+            <p class="text-xs text-[#64748B]">Inspect live JSON responses from Feathers service endpoints.</p>
+          </div>
+
+          <div class="p-6 rounded-xl bg-white border border-[#E2E8F0] shadow-sm space-y-4">
+            <div class="flex flex-col sm:flex-row items-center gap-3">
+              <span class="px-3 py-2 rounded-lg bg-green-50 border border-green-200 text-[#16A34A] text-xs font-bold font-mono">
+                GET
+              </span>
+              <select 
+                [ngModel]="apiEndpoint()" 
+                (ngModelChange)="apiEndpoint.set($event)"
+                class="flex-1 w-full px-4 py-2 bg-white border border-[#E2E8F0] rounded-lg text-xs font-mono text-[#1E293B] focus:outline-none focus:border-blue-600">
+                <option value="/api/articles">/api/articles (Tutorials & Guides)</option>
+                <option value="/api/services">/api/services (Foundational Topics)</option>
+                <option value="/api/team">/api/team (Instructors & Lab)</option>
+                <option value="/api/inquiries">/api/inquiries (Demo Requests)</option>
+                <option value="/api/media">/api/media (Schematics & Media)</option>
+                <option value="/api/stats">/api/stats (Real-time Insights KPI)</option>
+                <option value="/api/schema">/api/schema (Dynamic SQLite Schema)</option>
+                <option value="/api/settings">/api/settings (Site Settings)</option>
+                <option value="/api/activity">/api/activity (Audit Logs)</option>
+                <option value="/api/server-info">/api/server-info (System Health)</option>
+              </select>
+              <button 
+                (click)="runApiExplorer()"
+                [disabled]="apiLoading()"
+                class="w-full sm:w-auto px-5 py-2 rounded-lg bg-blue-600 hover:bg-blue-700 disabled:opacity-50 text-white text-xs font-semibold shadow-xs transition-all">
+                {{ apiLoading() ? 'Requesting...' : 'Execute Request' }}
+              </button>
+            </div>
+
+            <!-- Live JSON Code Box -->
+            <div>
+              <div class="text-xs font-bold text-[#1E293B] mb-2 flex items-center justify-between">
+                <span>Response Payload</span>
+                <span class="text-[10px] font-mono text-[#64748B]">Content-Type: application/json</span>
+              </div>
+              <pre class="p-4 rounded-xl bg-[#F1F5F9] border border-[#E2E8F0] text-xs font-mono text-[#1E293B] max-h-96 overflow-y-auto leading-relaxed">{{ apiResponse() }}</pre>
+            </div>
+          </div>
+        </div>
+      }
+
+      <!-- ================= 9. SETTINGS ================= -->
+      @if (activeSection() === 'settings') {
+        @if (settings(); as s) {
+          <div class="space-y-6 max-w-4xl mx-auto">
+            <div class="flex items-center justify-between pb-2">
+              <div>
+                <h2 class="text-lg font-bold text-[#1E293B] font-display">Global Platform Settings</h2>
+                <p class="text-xs text-[#64748B]">Directus singleton recorded into SQLite `settings` table.</p>
+              </div>
+              <button 
+                (click)="saveSettings()"
+                class="px-5 py-2 rounded-lg bg-blue-600 hover:bg-blue-700 text-white text-xs font-semibold shadow-xs">
+                Save Settings
+              </button>
+            </div>
+
+            <div class="p-6 rounded-xl bg-white border border-[#E2E8F0] shadow-sm space-y-4">
+              <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
+                <div>
+                  <label class="block text-xs font-semibold text-[#1E293B] mb-1">Platform Name</label>
+                  <input type="text" [(ngModel)]="s.site_name" class="w-full px-3.5 py-2 bg-white border border-[#E2E8F0] rounded-lg text-xs text-[#1E293B] focus:outline-none focus:border-blue-600">
+                </div>
+                <div>
+                  <label class="block text-xs font-semibold text-[#1E293B] mb-1">Tagline</label>
+                  <input type="text" [(ngModel)]="s.tagline" class="w-full px-3.5 py-2 bg-white border border-[#E2E8F0] rounded-lg text-xs text-[#1E293B] focus:outline-none focus:border-blue-600">
+                </div>
+              </div>
+
+              <div>
+                <label class="block text-xs font-semibold text-[#1E293B] mb-1">Hero Main Title</label>
+                <input type="text" [(ngModel)]="s.hero_title" class="w-full px-3.5 py-2 bg-white border border-[#E2E8F0] rounded-lg text-xs text-[#1E293B] focus:outline-none focus:border-blue-600">
+              </div>
+
+              <div>
+                <label class="block text-xs font-semibold text-[#1E293B] mb-1">Hero Subtitle</label>
+                <textarea rows="3" [(ngModel)]="s.hero_subtitle" class="w-full px-3.5 py-2 bg-white border border-[#E2E8F0] rounded-lg text-xs text-[#1E293B] focus:outline-none focus:border-blue-600"></textarea>
+              </div>
+
+              <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
+                <div>
+                  <label class="block text-xs font-semibold text-[#1E293B] mb-1">Contact Email</label>
+                  <input type="email" [(ngModel)]="s.contact_email" class="w-full px-3.5 py-2 bg-white border border-[#E2E8F0] rounded-lg text-xs text-[#1E293B] focus:outline-none focus:border-blue-600">
+                </div>
+                <div>
+                  <label class="block text-xs font-semibold text-[#1E293B] mb-1">Direct Phone</label>
+                  <input type="text" [(ngModel)]="s.contact_phone" class="w-full px-3.5 py-2 bg-white border border-[#E2E8F0] rounded-lg text-xs text-[#1E293B] focus:outline-none focus:border-blue-600">
+                </div>
+              </div>
+            </div>
+          </div>
+        }
+      }
+
+    </div>
+
+  </main>
+
+  <!-- ================= ITEM DRAWER / MODAL ================= -->
+  @if (isEditorOpen()) {
+    <div class="fixed inset-0 z-50 flex items-center justify-center p-4 bg-slate-900/40 backdrop-blur-xs animate-fade-in">
+      <div class="bg-white border border-[#E2E8F0] rounded-2xl w-full max-w-3xl max-h-[92vh] flex flex-col shadow-2xl overflow-hidden">
+        
+        <div class="px-6 py-4 border-b border-[#E2E8F0] bg-[#F8FAFC] flex items-center justify-between shrink-0">
+          <div class="flex items-center gap-2">
+            <span class="w-2.5 h-2.5 rounded-full bg-blue-600"></span>
+            <span class="text-sm font-bold text-[#1E293B] font-display">
+              {{ isCreatingNew() ? 'Create in' : 'Edit Item #' + editingItem().id + ' in' }} {{ editingCollection() }}
+            </span>
+          </div>
+          <button (click)="closeEditor()" class="w-8 h-8 rounded-lg bg-white border border-[#E2E8F0] text-[#64748B] hover:text-[#1E293B] flex items-center justify-center transition-colors">
+            ✕
+          </button>
+        </div>
+
+        <div class="p-6 overflow-y-auto space-y-4 flex-1">
+          
+          <!-- Articles Form -->
+          @if (editingCollection() === 'articles') {
+            <div class="space-y-4">
+              <div>
+                <label class="block text-xs font-semibold text-[#1E293B] mb-1">Tutorial Title *</label>
+                <input type="text" [(ngModel)]="editingItem().title" class="w-full px-3.5 py-2 bg-white border border-[#E2E8F0] rounded-lg text-xs text-[#1E293B] focus:outline-none focus:border-blue-600">
+              </div>
+
+              <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
+                <div>
+                  <label class="block text-xs font-semibold text-[#1E293B] mb-1">Category</label>
+                  <select [(ngModel)]="editingItem().category" class="w-full px-3.5 py-2 bg-white border border-[#E2E8F0] rounded-lg text-xs text-[#1E293B] focus:outline-none focus:border-blue-600">
+                    <option value="Risk Monitoring">Risk Monitoring</option>
+                    <option value="Distributed Systems">Distributed Systems</option>
+                    <option value="Database & SQLite">Database & SQLite</option>
+                    <option value="Hardware Setup">Hardware Setup</option>
+                  </select>
+                </div>
+                <div>
+                  <label class="block text-xs font-semibold text-[#1E293B] mb-1">Read Duration</label>
+                  <input type="text" [(ngModel)]="editingItem().reading_time" class="w-full px-3.5 py-2 bg-white border border-[#E2E8F0] rounded-lg text-xs text-[#1E293B] focus:outline-none focus:border-blue-600">
+                </div>
+              </div>
+
+              <div>
+                <label class="block text-xs font-semibold text-[#1E293B] mb-1">Short Summary (Excerpt)</label>
+                <textarea rows="2" [(ngModel)]="editingItem().excerpt" class="w-full px-3.5 py-2 bg-white border border-[#E2E8F0] rounded-lg text-xs text-[#1E293B] focus:outline-none focus:border-blue-600"></textarea>
+              </div>
+
+              <div>
+                <label class="block text-xs font-semibold text-[#1E293B] mb-1">Full Documentation (HTML / Text)</label>
+                <textarea rows="6" [(ngModel)]="editingItem().content" class="w-full px-3.5 py-2 bg-[#F1F5F9] border border-[#E2E8F0] font-mono rounded-lg text-xs text-[#1E293B] focus:outline-none focus:border-blue-600"></textarea>
+              </div>
+
+              <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
+                <div>
+                  <label class="block text-xs font-semibold text-[#1E293B] mb-1">Author Name</label>
+                  <input type="text" [(ngModel)]="editingItem().author_name" class="w-full px-3.5 py-2 bg-white border border-[#E2E8F0] rounded-lg text-xs text-[#1E293B] focus:outline-none focus:border-blue-600">
+                </div>
+                <div>
+                  <label class="block text-xs font-semibold text-[#1E293B] mb-1">Status</label>
+                  <select [(ngModel)]="editingItem().status" class="w-full px-3.5 py-2 bg-white border border-[#E2E8F0] rounded-lg text-xs text-[#1E293B] focus:outline-none focus:border-blue-600">
+                    <option value="published">Published</option>
+                    <option value="draft">Draft</option>
+                  </select>
+                </div>
+              </div>
+            </div>
+          }
+
+          <!-- Services (Topics) Form -->
+          @if (editingCollection() === 'services') {
+            <div class="space-y-4">
+              <div>
+                <label class="block text-xs font-semibold text-[#1E293B] mb-1">Topic Title *</label>
+                <input type="text" [(ngModel)]="editingItem().title" class="w-full px-3.5 py-2 bg-white border border-[#E2E8F0] rounded-lg text-xs text-[#1E293B] focus:outline-none focus:border-blue-600">
+              </div>
+
+              <div>
+                <label class="block text-xs font-semibold text-[#1E293B] mb-1">Short Description</label>
+                <textarea rows="2" [(ngModel)]="editingItem().short_description" class="w-full px-3.5 py-2 bg-white border border-[#E2E8F0] rounded-lg text-xs text-[#1E293B] focus:outline-none focus:border-blue-600"></textarea>
+              </div>
+
+              <div>
+                <label class="block text-xs font-semibold text-[#1E293B] mb-1">Detailed Description</label>
+                <textarea rows="4" [(ngModel)]="editingItem().detailed_description" class="w-full px-3.5 py-2 bg-white border border-[#E2E8F0] rounded-lg text-xs text-[#1E293B] focus:outline-none focus:border-blue-600"></textarea>
+              </div>
+            </div>
+          }
+
+          <!-- Inquiries Form -->
+          @if (editingCollection() === 'inquiries') {
+            <div class="space-y-4">
+              <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
+                <div>
+                  <label class="block text-xs font-semibold text-[#1E293B] mb-1">Student / Requester Name</label>
+                  <input type="text" [(ngModel)]="editingItem().name" class="w-full px-3.5 py-2 bg-white border border-[#E2E8F0] rounded-lg text-xs text-[#1E293B] focus:outline-none focus:border-blue-600">
+                </div>
+                <div>
+                  <label class="block text-xs font-semibold text-[#1E293B] mb-1">Status</label>
+                  <select [(ngModel)]="editingItem().status" class="w-full px-3.5 py-2 bg-white border border-[#E2E8F0] rounded-lg text-xs text-[#1E293B] focus:outline-none focus:border-blue-600">
+                    <option value="new">New</option>
+                    <option value="in_review">In Review</option>
+                    <option value="contacted">Contacted</option>
+                    <option value="resolved">Resolved</option>
+                  </select>
+                </div>
+              </div>
+
+              <div>
+                <label class="block text-xs font-semibold text-[#1E293B] mb-1">Message Scope</label>
+                <textarea rows="3" [(ngModel)]="editingItem().message" class="w-full px-3.5 py-2 bg-white border border-[#E2E8F0] rounded-lg text-xs text-[#1E293B] focus:outline-none focus:border-blue-600"></textarea>
+              </div>
+
+              <div>
+                <label class="block text-xs font-semibold text-[#1E293B] mb-1">Internal Notes</label>
+                <textarea rows="2" [(ngModel)]="editingItem().internal_notes" class="w-full px-3.5 py-2 bg-white border border-[#E2E8F0] rounded-lg text-xs text-[#1E293B] focus:outline-none focus:border-blue-600"></textarea>
+              </div>
+            </div>
+          }
+
+        </div>
+
+        <!-- Footer -->
+        <div class="px-6 py-4 border-t border-[#E2E8F0] bg-[#F8FAFC] flex items-center justify-between shrink-0">
+          <div>
+            @if (!isCreatingNew() && editingItem().id) {
+              <button 
+                (click)="deleteItem(editingCollection(), editingItem().id)"
+                class="px-3.5 py-2 rounded-lg bg-red-50 hover:bg-red-100 border border-red-200 text-[#DC2626] text-xs font-semibold">
+                Delete Record
+              </button>
+            }
+          </div>
+
+          <div class="flex items-center gap-2">
+            <button (click)="closeEditor()" class="px-4 py-2 rounded-lg bg-white hover:bg-slate-50 border border-[#E2E8F0] text-[#1E293B] text-xs font-semibold">
+              Cancel
+            </button>
+            <button 
+              (click)="saveItem()"
+              [disabled]="editorSaving()"
+              class="px-5 py-2 rounded-lg bg-blue-600 hover:bg-blue-700 disabled:opacity-50 text-white text-xs font-semibold shadow-xs">
+              {{ editorSaving() ? 'Saving...' : 'Save to SQLite' }}
+            </button>
+          </div>
+        </div>
+
+      </div>
+    </div>
+  }
+
+  <!-- ================= MEDIA UPLOAD MODAL ================= -->
+  @if (uploadModalOpen()) {
+    <div class="fixed inset-0 z-50 flex items-center justify-center p-4 bg-slate-900/40 backdrop-blur-xs animate-fade-in">
+      <div class="bg-white border border-[#E2E8F0] rounded-2xl w-full max-w-md shadow-2xl p-6 space-y-4">
+        <div class="flex items-center justify-between pb-3 border-b border-[#E2E8F0]">
+          <h3 class="text-sm font-bold text-[#1E293B]">Upload Media Asset</h3>
+          <button (click)="uploadModalOpen.set(false)" class="text-[#64748B] hover:text-[#1E293B]">✕</button>
+        </div>
+
+        <div class="space-y-3">
+          <div>
+            <label class="block text-xs font-semibold text-[#1E293B] mb-1">Asset Title</label>
+            <input type="text" [(ngModel)]="uploadTitle" placeholder="e.g. Hardware Flow Diagram" class="w-full px-3.5 py-2 bg-white border border-[#E2E8F0] rounded-lg text-xs text-[#1E293B] focus:outline-none focus:border-blue-600">
+          </div>
+
+          <div>
+            <label class="block text-xs font-semibold text-[#1E293B] mb-1">Folder Category</label>
+            <select [(ngModel)]="uploadFolder" class="w-full px-3.5 py-2 bg-white border border-[#E2E8F0] rounded-lg text-xs text-[#1E293B] focus:outline-none focus:border-blue-600">
+              <option value="Hardware Photos">Hardware Photos</option>
+              <option value="Flow Diagrams">Flow Diagrams</option>
+              <option value="Wiring Schematics">Wiring Schematics</option>
+            </select>
+          </div>
+
+          <div>
+            <label class="block text-xs font-semibold text-[#1E293B] mb-1">Local Image File</label>
+            <input type="file" (change)="onFileSelected($event)" class="w-full text-xs text-[#64748B] file:mr-3 file:py-1.5 file:px-3 file:rounded-lg file:border-0 file:text-xs file:font-semibold file:bg-blue-600 file:text-white hover:file:bg-blue-700">
+          </div>
+
+          <div class="text-center text-xs text-[#64748B] font-medium my-2">— OR PROVIDE DIRECT URL —</div>
+
+          <div>
+            <label class="block text-xs font-semibold text-[#1E293B] mb-1">Direct Image URL</label>
+            <input type="text" [(ngModel)]="quickImageUrl" placeholder="https://..." class="w-full px-3.5 py-2 bg-white border border-[#E2E8F0] rounded-lg text-xs text-[#1E293B] focus:outline-none focus:border-blue-600">
+          </div>
+        </div>
+
+        <div class="flex items-center justify-end gap-2 pt-4 border-t border-[#E2E8F0]">
+          <button (click)="uploadModalOpen.set(false)" class="px-4 py-2 rounded-lg bg-slate-100 hover:bg-slate-200 text-[#1E293B] text-xs font-semibold">
+            Cancel
+          </button>
+          <button (click)="submitMediaUpload()" [disabled]="uploading()" class="px-5 py-2 rounded-lg bg-blue-600 hover:bg-blue-700 disabled:opacity-50 text-white text-xs font-semibold shadow-xs">
+            {{ uploading() ? 'Uploading...' : 'Save Asset' }}
+          </button>
+        </div>
+      </div>
+    </div>
+  }
+
+</div>

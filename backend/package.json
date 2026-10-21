@@ -1,0 +1,26 @@
+{
+  "name": "backend",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+    "start": "node src/index.js",
+    "dev": "node src/index.js",
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "dependencies": {
+    "@feathersjs/express": "^5.0.50",
+    "@feathersjs/feathers": "^5.0.50",
+    "@feathersjs/knex": "^5.0.50",
+    "@feathersjs/socketio": "^5.0.50",
+    "cors": "^2.8.6",
+    "dotenv": "^18.0.8",
+    "knex": "^3.3.0",
+    "multer": "^2.4.0",
+    "sqlite3": "^6.0.1",
+    "uuid": "^14.0.3"
+  }
+}

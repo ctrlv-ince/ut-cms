@@ -1,0 +1,15 @@
+{
+  "name": "directus-feathers-sqlite-angular-cms",
+  "version": "1.0.0",
+  "description": "Directus-style Headless CMS with Feathers Core backend, SQLite database, and Angular + Tailwind CSS frontend.",
+  "scripts": {
+    "start:backend": "cd backend && npm start",
+    "start:frontend": "cd frontend && npm start",
+    "build:frontend": "cd frontend && npm run build",
+    "dev": "concurrently -n \"BACKEND,FRONTEND\" -c \"magenta,blue\" \"npm run start:backend\" \"npm run start:frontend\"",
+    "start": "npm run dev"
+  },
+  "devDependencies": {
+    "concurrently": "^9.1.2"
+  }
+}

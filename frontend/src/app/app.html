@@ -1,0 +1,42 @@
+<div class="relative min-h-screen bg-[#F8FAFC] text-[#1E293B] font-sans selection:bg-blue-600 selection:text-white">
+
+  <!-- ================= FLOATING DUAL-PORTAL SWITCHER PILL (LIGHT SAAS) ================= -->
+  <div class="fixed bottom-6 right-6 z-50 flex items-center p-1.5 rounded-full bg-white/95 backdrop-blur-md border border-[#E2E8F0] shadow-lg shadow-slate-300/40">
+    <button 
+      (click)="switchToWebsite()"
+      [class.bg-blue-600]="activeMode() === 'website'"
+      [class.text-white]="activeMode() === 'website'"
+      [class.shadow-xs]="activeMode() === 'website'"
+      [class.text-[#64748B]]="activeMode() !== 'website'"
+      [class.hover:text-[#1E293B]]="activeMode() !== 'website'"
+      class="flex items-center gap-2 px-4 py-2 rounded-full text-xs font-semibold transition-all">
+      <svg class="w-3.5 h-3.5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 12a9 9 0 01-9 9m9-9a9 9 0 00-9-9m9 9H3m9 9a9 9 0 01-9-9m9 9c1.657 0 3-4.03 3-9s-1.343-9-3-9m0 18c-1.657 0-3-4.03-3-9s1.343-9 3-9m-9 9a9 9 0 019-9" />
+      </svg>
+      <span>Educational Portal</span>
+    </button>
+
+    <button 
+      (click)="switchToStudio('dashboard')"
+      [class.bg-blue-600]="activeMode() === 'studio'"
+      [class.text-white]="activeMode() === 'studio'"
+      [class.shadow-xs]="activeMode() === 'studio'"
+      [class.text-[#64748B]]="activeMode() !== 'studio'"
+      [class.hover:text-[#1E293B]]="activeMode() !== 'studio'"
+      class="flex items-center gap-2 px-4 py-2 rounded-full text-xs font-semibold transition-all">
+      <svg class="w-3.5 h-3.5" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+        <path stroke-linecap="round" stroke-linejoin="round" d="M20 7l-8-4-8 4m16 0l-8 4m8-4v10l-8 4m0-10L4 7m8 4v10M4 7v10l8 4" />
+      </svg>
+      <span>Directus Studio</span>
+      <span class="w-2 h-2 rounded-full bg-[#16A34A] animate-pulse"></span>
+    </button>
+  </div>
+
+  <!-- ================= ACTIVE VIEW ================= -->
+  @if (activeMode() === 'website') {
+    <app-website (switchToStudio)="switchToStudio($event)"></app-website>
+  } @else {
+    <app-studio (switchToWebsite)="switchToWebsite()"></app-studio>
+  }
+
+</div>
