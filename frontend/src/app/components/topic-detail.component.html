@@ -1,0 +1,506 @@
+<div class="min-h-screen bg-[#F8FAFC] text-[#1E293B]">
+
+  <!-- ================= TOP STICKY BREADCRUMB & MODULE SELECTOR BAR ================= -->
+  <div class="sticky top-16 z-30 bg-white/95 backdrop-blur-md border-b border-[#E2E8F0] shadow-xs">
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-3 flex flex-wrap items-center justify-between gap-3">
+      
+      <!-- Breadcrumb & Back Button -->
+      <div class="flex items-center gap-2 text-xs text-[#64748B]">
+        <button
+          type="button"
+          (click)="close.emit()"
+          class="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-xl bg-slate-100 hover:bg-blue-50 hover:text-blue-600 font-semibold text-[#1E293B] transition-colors border border-slate-200">
+          <svg class="w-3.5 h-3.5" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 19l-7-7m0 0l7-7m-7 7h18"/></svg>
+          <span>Back to Curriculum</span>
+        </button>
+        <span class="text-slate-300">/</span>
+        <span class="font-medium text-[#64748B] hidden sm:inline">Educational Curriculum</span>
+        <span class="text-slate-300 hidden sm:inline">/</span>
+        <span class="font-bold text-blue-600 truncate max-w-xs sm:max-w-md">{{ topic.badge }}: {{ topic.topicTitle }}</span>
+      </div>
+
+      <!-- Module Switcher Tabs (Module 01, 02, 03) -->
+      <div class="inline-flex p-1 bg-slate-100 border border-slate-200 rounded-xl shadow-xs text-xs font-semibold">
+        @for (modNum of [1, 2, 3]; track modNum) {
+          <button
+            type="button"
+            (click)="selectModule.emit(modNum)"
+            [class.bg-blue-600]="topic.moduleId === modNum"
+            [class.text-white]="topic.moduleId === modNum"
+            [class.shadow-xs]="topic.moduleId === modNum"
+            [class.text-[#64748B]]="topic.moduleId !== modNum"
+            [class.hover:text-[#1E293B]]="topic.moduleId !== modNum"
+            class="px-3 py-1.5 rounded-lg transition-all flex items-center gap-1.5">
+            <span class="w-4 h-4 rounded-full text-[10px] flex items-center justify-center font-bold"
+              [class.bg-white]="topic.moduleId === modNum"
+              [class.text-blue-600]="topic.moduleId === modNum"
+              [class.bg-slate-200]="topic.moduleId !== modNum"
+              [class.text-[#64748B]]="topic.moduleId !== modNum">
+              {{ modNum }}
+            </span>
+            <span>Module 0{{ modNum }}</span>
+          </button>
+        }
+      </div>
+
+    </div>
+  </div>
+
+  <!-- ================= MODULE HERO BANNER ================= -->
+  <section class="bg-gradient-to-b from-white via-slate-50 to-[#F8FAFC] border-b border-[#E2E8F0] py-12 sm:py-16">
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 space-y-6">
+
+      <!-- Top Meta Badges -->
+      <div class="flex flex-wrap items-center justify-between gap-3">
+        <div class="flex flex-wrap items-center gap-2">
+          <span class="px-3 py-1 rounded-full text-xs font-bold uppercase tracking-wider bg-blue-50 text-blue-700 border border-blue-200">
+            {{ topic.badge }} • {{ topic.category }}
+          </span>
+          <span class="px-3 py-1 rounded-full text-xs font-semibold bg-white border border-[#E2E8F0] text-[#64748B] shadow-xs">
+            ⏱ {{ topic.readingTime }}
+          </span>
+          <span class="px-3 py-1 rounded-full text-xs font-semibold bg-white border border-[#E2E8F0] text-[#64748B] shadow-xs">
+            🎯 Level: {{ topic.level }}
+          </span>
+        </div>
+
+        <!-- Author Attribution Pill -->
+        <div class="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-white border border-[#E2E8F0] text-xs font-semibold text-[#1E293B] shadow-xs">
+          <span class="w-5 h-5 rounded-full bg-blue-600 text-white flex items-center justify-center text-[10px] font-bold">LD</span>
+          <span>Curriculum Developer: <strong class="text-blue-900 font-bold">{{ authorName }}</strong></span>
+        </div>
+      </div>
+
+      <!-- Title & Subtitle -->
+      <div class="max-w-4xl space-y-3">
+        <h1 class="text-3xl sm:text-4xl lg:text-5xl font-extrabold text-[#1E293B] tracking-tight leading-tight">
+          {{ topic.topicTitle }}
+        </h1>
+        <p class="text-base sm:text-lg text-blue-900/80 font-medium leading-relaxed">
+          {{ topic.subtitle }}
+        </p>
+      </div>
+
+      <!-- Hero Detailed Summary Box -->
+      <div class="p-6 rounded-2xl bg-white border border-[#E2E8F0] shadow-sm max-w-4xl text-xs sm:text-sm text-[#475569] leading-relaxed">
+        <div class="flex items-start gap-3.5">
+          <div class="w-9 h-9 rounded-xl bg-blue-50 border border-blue-200 text-blue-600 flex items-center justify-center shrink-0 mt-0.5 shadow-xs">
+            <svg class="w-5 h-5" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"/></svg>
+          </div>
+          <div class="space-y-1.5">
+            <div class="font-bold text-[#1E293B] text-sm">Module Overview &amp; Engineering Focus</div>
+            <p>{{ topic.heroSummary }}</p>
+          </div>
+        </div>
+      </div>
+
+      <!-- Prerequisites & Quick Actions -->
+      <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-4 pt-2">
+        <div class="flex flex-wrap items-center gap-2">
+          <span class="text-xs font-bold text-[#64748B] uppercase tracking-wider mr-1">Prerequisites:</span>
+          @for (prereq of topic.prerequisites; track prereq) {
+            <span class="px-2.5 py-1 rounded-lg bg-slate-100 text-slate-700 text-xs font-medium border border-slate-200">
+              {{ prereq }}
+            </span>
+          }
+        </div>
+
+        <div class="flex items-center gap-3 flex-wrap">
+          <button
+            type="button"
+            (click)="jumpToSection('section-implementation')"
+            class="px-4 py-2 rounded-xl bg-blue-600 hover:bg-blue-700 text-white text-xs font-semibold shadow-xs flex items-center gap-1.5 transition-colors">
+            <span>Explore Flow &amp; Code ↓</span>
+          </button>
+          <button
+            type="button"
+            (click)="switchToStudio.emit('services')"
+            class="px-4 py-2 rounded-xl bg-white hover:bg-slate-50 border border-[#E2E8F0] text-xs font-semibold text-[#1E293B] shadow-xs flex items-center gap-1.5 transition-colors">
+            <svg class="w-3.5 h-3.5 text-blue-600" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path stroke-linecap="round" stroke-linejoin="round" d="M20 7l-8-4-8 4m16 0l-8 4m8-4v10l-8 4m0-10L4 7m8 4v10M4 7v10l8 4"/></svg>
+            <span>Directus Studio</span>
+          </button>
+          <button
+            type="button"
+            (click)="scrollToSection.emit('live-dashboard')"
+            class="px-4 py-2 rounded-xl bg-rose-50 hover:bg-rose-100 text-rose-600 text-xs font-semibold border border-rose-200 shadow-xs flex items-center gap-1.5 transition-colors">
+            <span class="w-1.5 h-1.5 rounded-full bg-rose-500 animate-pulse"></span>
+            <span>Live Dashboard</span>
+          </button>
+        </div>
+      </div>
+
+    </div>
+  </section>
+
+  <!-- ================= 1. CORE CURRICULUM COMPETENCIES ================= -->
+  <section class="py-14 bg-white border-b border-[#E2E8F0]">
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 space-y-8">
+      <div>
+        <span class="text-xs uppercase font-bold tracking-wider text-blue-600">Curriculum Competencies</span>
+        <h2 class="text-2xl sm:text-3xl font-extrabold text-[#1E293B] mt-1">What You Will Master in This Module</h2>
+        <p class="text-[#64748B] text-xs sm:text-sm mt-1 max-w-2xl">
+          Concrete engineering capabilities designed for physical IoT hardware pipelines, telemetry buffering, and relational persistence.
+        </p>
+      </div>
+
+      <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+        @for (comp of topic.competencies; track comp.title) {
+          <div class="p-6 rounded-2xl bg-[#F8FAFC] border border-[#E2E8F0] shadow-xs space-y-4 flex flex-col justify-between hover:border-blue-300 transition-colors">
+            <div class="space-y-2.5">
+              <div class="flex items-center justify-between">
+                <span class="px-2.5 py-1 rounded-md text-[10px] font-extrabold uppercase bg-blue-100 text-blue-700 border border-blue-200">
+                  {{ comp.badge }}
+                </span>
+                <span class="w-2.5 h-2.5 rounded-full bg-blue-600"></span>
+              </div>
+              <h3 class="text-base font-bold text-[#1E293B]">{{ comp.title }}</h3>
+              <p class="text-xs text-[#475569] leading-relaxed">{{ comp.description }}</p>
+            </div>
+            <div class="p-3.5 rounded-xl bg-white border border-slate-200 text-xs text-[#334155] flex items-start gap-2 shadow-xs">
+              <span class="font-bold text-blue-600 shrink-0">Key Takeaway:</span>
+              <span>{{ comp.keyTakeaway }}</span>
+            </div>
+          </div>
+        }
+      </div>
+    </div>
+  </section>
+
+  <!-- ================= 2. ARCHITECTURE PIPELINE & FLOW TOPOLOGY ================= -->
+  <section class="py-14 bg-[#F8FAFC] border-b border-[#E2E8F0]">
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 space-y-8">
+      <div>
+        <span class="text-xs uppercase font-bold tracking-wider text-blue-600">Pipeline Architecture</span>
+        <h2 class="text-2xl sm:text-3xl font-extrabold text-[#1E293B] mt-1">Data Flow &amp; Process Sequence</h2>
+        <p class="text-[#64748B] text-xs sm:text-sm mt-1 max-w-2xl">{{ topic.architectureSummary }}</p>
+      </div>
+
+      <!-- Sequential Flow Step Cards -->
+      <div class="grid grid-cols-1 md:grid-cols-5 gap-4">
+        @for (step of topic.pipelineSteps; track step.phase; let i = $index) {
+          <div class="bg-white rounded-2xl border border-[#E2E8F0] p-5 shadow-xs space-y-3 flex flex-col justify-between relative group hover:border-blue-300 transition-colors">
+            <div class="space-y-2">
+              <div class="flex items-center justify-between">
+                <span class="text-[10px] font-extrabold text-blue-600 uppercase">{{ step.phase }}</span>
+                <span class="px-1.5 py-0.5 rounded text-[9px] font-mono bg-slate-100 text-slate-600 border border-slate-200">{{ step.protocol }}</span>
+              </div>
+              <div class="font-bold text-xs text-[#1E293B] leading-snug">{{ step.component }}</div>
+              <p class="text-[11px] text-[#64748B] leading-relaxed">{{ step.description }}</p>
+            </div>
+            <div class="pt-2 border-t border-slate-100 flex items-center justify-between text-[10px] text-[#94A3B8]">
+              <span>Step {{ i + 1 }} of 5</span>
+              <span>Sequential</span>
+            </div>
+          </div>
+        }
+      </div>
+    </div>
+  </section>
+
+  <!-- ================= 3. TECHNICAL IMPLEMENTATION & CODE ================= -->
+  <section id="section-implementation" class="py-14 bg-white border-b border-[#E2E8F0]">
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 space-y-6">
+      
+      <div class="flex flex-col lg:flex-row lg:items-end justify-between gap-4">
+        <div>
+          <span class="text-xs uppercase font-bold tracking-wider text-blue-600">Technical Implementation</span>
+          <h2 class="text-2xl sm:text-3xl font-extrabold text-[#1E293B] mt-1">Ready-to-Deploy Code &amp; Flow Artifacts</h2>
+          <p class="text-[#64748B] text-xs sm:text-sm mt-1">
+            Directly copy verified JavaScript function scripts, Node-RED flow JSON declarations, or hardware pinouts.
+          </p>
+        </div>
+
+        <!-- Tab Switcher -->
+        <div class="inline-flex p-1 bg-slate-100 border border-slate-200 rounded-xl shadow-xs text-xs font-semibold">
+          <button
+            type="button"
+            (click)="activeTab.set('code')"
+            [class.bg-blue-600]="activeTab() === 'code'"
+            [class.text-white]="activeTab() === 'code'"
+            [class.text-[#64748B]]="activeTab() !== 'code'"
+            class="px-3.5 py-1.5 rounded-lg transition-colors flex items-center gap-1.5">
+            <span>JavaScript Script</span>
+          </button>
+          <button
+            type="button"
+            (click)="activeTab.set('flow')"
+            [class.bg-blue-600]="activeTab() === 'flow'"
+            [class.text-white]="activeTab() === 'flow'"
+            [class.text-[#64748B]]="activeTab() !== 'flow'"
+            class="px-3.5 py-1.5 rounded-lg transition-colors flex items-center gap-1.5">
+            <span>Flow JSON</span>
+          </button>
+          <button
+            type="button"
+            (click)="activeTab.set('hardware')"
+            [class.bg-blue-600]="activeTab() === 'hardware'"
+            [class.text-white]="activeTab() === 'hardware'"
+            [class.text-[#64748B]]="activeTab() !== 'hardware'"
+            class="px-3.5 py-1.5 rounded-lg transition-colors flex items-center gap-1.5">
+            <span>Hardware &amp; Wiring</span>
+          </button>
+          <button
+            type="button"
+            (click)="activeTab.set('directus')"
+            [class.bg-blue-600]="activeTab() === 'directus'"
+            [class.text-white]="activeTab() === 'directus'"
+            [class.text-[#64748B]]="activeTab() !== 'directus'"
+            class="px-3.5 py-1.5 rounded-lg transition-colors flex items-center gap-1.5">
+            <span>Directus Schema</span>
+          </button>
+        </div>
+      </div>
+
+      <!-- TAB CONTENT: JAVASCRIPT CODE -->
+      @if (activeTab() === 'code') {
+        <div class="space-y-4">
+          <div class="rounded-2xl overflow-hidden border border-[#334155] bg-[#0F172A] shadow-lg font-mono text-xs">
+            <div class="px-5 py-3 bg-[#1E293B] border-b border-[#334155] flex items-center justify-between text-slate-300">
+              <div class="flex items-center gap-2">
+                <span class="w-3 h-3 rounded-full bg-rose-500"></span>
+                <span class="w-3 h-3 rounded-full bg-amber-500"></span>
+                <span class="w-3 h-3 rounded-full bg-emerald-500"></span>
+                <span class="text-xs font-semibold text-slate-200 ml-2 font-sans">{{ topic.functionScriptLabel }}</span>
+              </div>
+              <button
+                type="button"
+                (click)="copyScript()"
+                class="px-3 py-1.5 rounded-lg bg-slate-700 hover:bg-slate-600 text-white text-xs font-sans font-semibold flex items-center gap-1.5 transition-colors">
+                @if (copiedCode()) {
+                  <span class="text-emerald-400 font-bold">✓ Copied to Clipboard!</span>
+                } @else {
+                  <svg class="w-3.5 h-3.5" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 16H6a2 2 0 01-2-2V6a2 2 0 012-2h8a2 2 0 012 2v2m-6 12h8a2 2 0 002-2v-8a2 2 0 00-2-2h-8a2 2 0 00-2 2v8a2 2 0 002 2z"/></svg>
+                  <span>Copy JavaScript</span>
+                }
+              </button>
+            </div>
+            <pre class="p-6 text-emerald-400 overflow-x-auto text-xs leading-relaxed max-h-[480px]"><code>{{ topic.functionScript }}</code></pre>
+          </div>
+
+          <!-- Script Notes -->
+          <div class="grid grid-cols-1 md:grid-cols-3 gap-3">
+            @for (note of topic.functionScriptNotes; track note) {
+              <div class="p-3.5 rounded-xl bg-slate-50 border border-slate-200 text-xs text-[#334155] flex items-start gap-2">
+                <span class="w-1.5 h-1.5 rounded-full bg-blue-600 mt-1 shrink-0"></span>
+                <span>{{ note }}</span>
+              </div>
+            }
+          </div>
+        </div>
+      }
+
+      <!-- TAB CONTENT: FLOW JSON -->
+      @if (activeTab() === 'flow') {
+        <div class="space-y-4">
+          <div class="rounded-2xl overflow-hidden border border-[#334155] bg-[#0F172A] shadow-lg font-mono text-xs">
+            <div class="px-5 py-3 bg-[#1E293B] border-b border-[#334155] flex items-center justify-between text-slate-300">
+              <div class="flex items-center gap-2">
+                <span class="w-3 h-3 rounded-full bg-rose-500"></span>
+                <span class="w-3 h-3 rounded-full bg-amber-500"></span>
+                <span class="w-3 h-3 rounded-full bg-emerald-500"></span>
+                <span class="text-xs font-semibold text-slate-200 ml-2 font-sans">Node-RED Flow JSON Export (Import via Ctrl+I)</span>
+              </div>
+              <button
+                type="button"
+                (click)="copyFlow()"
+                class="px-3 py-1.5 rounded-lg bg-slate-700 hover:bg-slate-600 text-white text-xs font-sans font-semibold flex items-center gap-1.5 transition-colors">
+                @if (copiedFlow()) {
+                  <span class="text-emerald-400 font-bold">✓ Copied Flow JSON!</span>
+                } @else {
+                  <svg class="w-3.5 h-3.5" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 16H6a2 2 0 01-2-2V6a2 2 0 012-2h8a2 2 0 012 2v2m-6 12h8a2 2 0 002-2v-8a2 2 0 00-2-2h-8a2 2 0 00-2 2v8a2 2 0 002 2z"/></svg>
+                  <span>Copy Flow JSON</span>
+                }
+              </button>
+            </div>
+            <pre class="p-6 text-cyan-300 overflow-x-auto text-xs leading-relaxed max-h-[480px]"><code>{{ topic.flowJson }}</code></pre>
+          </div>
+
+          <div class="p-4 rounded-xl bg-blue-50 border border-blue-200 text-xs text-blue-900 flex items-center gap-2.5">
+            <svg class="w-5 h-5 text-blue-600 shrink-0" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"/></svg>
+            <span>To import: In your Node-RED editor, press <code class="px-1.5 py-0.5 rounded bg-white border border-blue-200 font-mono font-bold">Ctrl + I</code>, paste the JSON above, and click <strong>Import</strong>.</span>
+          </div>
+        </div>
+      }
+
+      <!-- TAB CONTENT: HARDWARE SPECS -->
+      @if (activeTab() === 'hardware') {
+        <div class="rounded-2xl border border-[#E2E8F0] overflow-hidden bg-white shadow-xs divide-y divide-slate-100">
+          <div class="p-4 bg-slate-50 text-xs font-bold text-[#1E293B] grid grid-cols-12 gap-4">
+            <div class="col-span-12 sm:col-span-4">Hardware Component</div>
+            <div class="col-span-12 sm:col-span-4">Wiring &amp; GPIO Connections</div>
+            <div class="col-span-12 sm:col-span-4">Operational Role &amp; Purpose</div>
+          </div>
+          @for (hw of topic.hardwareSpecs; track hw.component) {
+            <div class="p-4 text-xs grid grid-cols-12 gap-4 items-start">
+              <div class="col-span-12 sm:col-span-4 font-bold text-[#1E293B] flex items-center gap-2">
+                <span class="w-2 h-2 rounded-full bg-blue-600 shrink-0"></span>
+                <span>{{ hw.component }}</span>
+              </div>
+              <div class="col-span-12 sm:col-span-4 font-mono text-[11px] text-blue-700 bg-blue-50/60 p-2 rounded-lg border border-blue-100">
+                {{ hw.wiring }}
+              </div>
+              <div class="col-span-12 sm:col-span-4 text-[#64748B] leading-relaxed">
+                {{ hw.purpose }}
+              </div>
+            </div>
+          }
+        </div>
+      }
+
+      <!-- TAB CONTENT: DIRECTUS SCHEMA -->
+      @if (activeTab() === 'directus') {
+        <div class="space-y-6">
+          <div class="p-6 rounded-2xl bg-[#F8FAFC] border border-[#E2E8F0] space-y-4">
+            <div class="flex flex-wrap items-center justify-between gap-3">
+              <div>
+                <span class="text-[10px] font-bold uppercase tracking-wider text-blue-600">Database Collection Target</span>
+                <h4 class="text-base font-bold text-[#1E293B]">Table: <code class="text-blue-600 font-mono">{{ topic.directusIntegration.tableName }}</code></h4>
+                <p class="text-xs text-[#64748B] mt-0.5">{{ topic.directusIntegration.tableDescription }}</p>
+              </div>
+              <button
+                type="button"
+                (click)="switchToStudio.emit('services')"
+                class="px-4 py-2 rounded-xl bg-blue-600 hover:bg-blue-700 text-white text-xs font-semibold shadow-xs flex items-center gap-1.5 transition-colors">
+                <span>{{ topic.directusIntegration.studioAction }}</span>
+                <svg class="w-3.5 h-3.5" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M14 5l7 7m0 0l-7 7m7-7H3"/></svg>
+              </button>
+            </div>
+
+            <!-- Field Specifications Table -->
+            <div class="rounded-xl border border-[#E2E8F0] overflow-hidden bg-white shadow-xs divide-y divide-slate-100">
+              <div class="p-3 bg-slate-50 text-[11px] font-bold text-[#1E293B] grid grid-cols-12 gap-3">
+                <div class="col-span-3">Field Name</div>
+                <div class="col-span-3">SQLite Data Type</div>
+                <div class="col-span-6">Field Description &amp; Directus Interface</div>
+              </div>
+              @for (field of topic.directusIntegration.fields; track field.name) {
+                <div class="p-3 text-xs grid grid-cols-12 gap-3 items-center">
+                  <div class="col-span-3 font-mono font-bold text-blue-700">{{ field.name }}</div>
+                  <div class="col-span-3 font-mono text-[11px] text-slate-600">{{ field.type }}</div>
+                  <div class="col-span-6 text-[#64748B]">{{ field.desc }}</div>
+                </div>
+              }
+            </div>
+
+            <!-- Sample Record -->
+            <div>
+              <div class="text-[11px] font-bold text-[#64748B] uppercase tracking-wider mb-1.5">Sample Directus / SQLite JSON Entity:</div>
+              <pre class="p-4 rounded-xl bg-slate-900 text-emerald-400 font-mono text-xs overflow-x-auto"><code>{{ topic.directusIntegration.sampleRecord }}</code></pre>
+            </div>
+          </div>
+        </div>
+      }
+
+    </div>
+  </section>
+
+  <!-- ================= 4. PRACTICAL LABORATORY EXERCISE ================= -->
+  <section class="py-14 bg-[#F8FAFC] border-b border-[#E2E8F0]">
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 space-y-6">
+      <div class="bg-white rounded-2xl border border-[#E2E8F0] p-8 shadow-sm space-y-6">
+
+        <div class="border-b border-[#E2E8F0] pb-4">
+          <span class="text-xs uppercase font-bold tracking-wider text-blue-600">Practical Laboratory Exercise</span>
+          <h2 class="text-2xl sm:text-3xl font-extrabold text-[#1E293B] mt-1">{{ topic.labExercise.title }}</h2>
+          <p class="text-xs sm:text-sm text-[#64748B] mt-1">{{ topic.labExercise.overview }}</p>
+          <div class="mt-2 text-xs text-blue-700 font-medium">Prerequisites: {{ topic.labExercise.prerequisites }}</div>
+        </div>
+
+        <!-- Lab Steps with Interactive Checkboxes -->
+        <div class="space-y-3">
+          <div class="text-xs font-bold text-[#1E293B] uppercase tracking-wider">Step-by-Step Lab Protocol (Click step to mark completed):</div>
+          <div class="space-y-2">
+            @for (step of topic.labExercise.steps; track step; let idx = $index) {
+              <div
+                (click)="toggleStep(idx)"
+                class="p-3.5 rounded-xl border transition-all cursor-pointer flex items-start gap-3 text-xs"
+                [class.bg-emerald-50]="completedSteps().has(idx)"
+                [class.border-emerald-300]="completedSteps().has(idx)"
+                [class.bg-slate-50]="!completedSteps().has(idx)"
+                [class.border-slate-200]="!completedSteps().has(idx)">
+                <div class="w-5 h-5 rounded-md flex items-center justify-center shrink-0 mt-0.5"
+                  [class.bg-emerald-600]="completedSteps().has(idx)"
+                  [class.text-white]="completedSteps().has(idx)"
+                  [class.border]="!completedSteps().has(idx)"
+                  [class.border-slate-300]="!completedSteps().has(idx)"
+                  [class.bg-white]="!completedSteps().has(idx)">
+                  @if (completedSteps().has(idx)) {
+                    <svg class="w-3.5 h-3.5" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="3" d="M5 13l4 4L19 7"/></svg>
+                  } @else {
+                    <span class="text-[10px] font-bold text-slate-500">{{ idx + 1 }}</span>
+                  }
+                </div>
+                <div class="flex-1" [class.line-through]="completedSteps().has(idx)" [class.text-slate-500]="completedSteps().has(idx)">
+                  {{ step }}
+                </div>
+              </div>
+            }
+          </div>
+        </div>
+
+        <!-- Expected Outcome -->
+        <div class="p-4 rounded-xl bg-emerald-50 border border-emerald-200 text-xs text-emerald-900 flex items-start gap-3">
+          <svg class="w-5 h-5 text-emerald-600 shrink-0 mt-0.5" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"/></svg>
+          <div>
+            <span class="font-bold text-emerald-950">Expected Outcome &amp; Verification Criteria: </span>
+            <span>{{ topic.labExercise.expectedResult }}</span>
+          </div>
+        </div>
+
+      </div>
+    </div>
+  </section>
+
+  <!-- ================= 5. MODULE NAVIGATION CONTROLS ================= -->
+  <section class="py-8 bg-white border-b border-[#E2E8F0]">
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 flex flex-col sm:flex-row items-center justify-between gap-4">
+      <div>
+        @if (topic.moduleId > 1) {
+          <button
+            type="button"
+            (click)="selectModule.emit(topic.moduleId - 1)"
+            class="px-5 py-2.5 rounded-xl border border-[#E2E8F0] bg-white hover:bg-slate-50 text-xs font-semibold text-[#1E293B] shadow-xs flex items-center gap-2 transition-colors">
+            <svg class="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 19l-7-7 7-7"/></svg>
+            <span>Previous: Module 0{{ topic.moduleId - 1 }}</span>
+          </button>
+        }
+      </div>
+
+      <button
+        type="button"
+        (click)="close.emit()"
+        class="px-6 py-2.5 rounded-xl bg-slate-100 hover:bg-slate-200 text-xs font-semibold text-[#1E293B] transition-colors">
+        Return to Educational Platform
+      </button>
+
+      <div>
+        @if (topic.moduleId < 3) {
+          <button
+            type="button"
+            (click)="selectModule.emit(topic.moduleId + 1)"
+            class="px-5 py-2.5 rounded-xl bg-blue-600 hover:bg-blue-700 text-white text-xs font-semibold shadow-xs flex items-center gap-2 transition-colors">
+            <span>Next: Module 0{{ topic.moduleId + 1 }}</span>
+            <svg class="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7"/></svg>
+          </button>
+        }
+      </div>
+    </div>
+  </section>
+
+  <!-- ================= DEDICATED PAGE FOOTER ================= -->
+  <footer class="bg-white py-10 text-xs text-[#64748B]">
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 flex flex-col sm:flex-row items-center justify-between gap-6">
+      <div class="flex items-center gap-3">
+        <div class="w-8 h-8 rounded-lg bg-blue-600 text-white flex items-center justify-center font-bold text-xs">NR</div>
+        <div>
+          <div class="font-bold text-[#1E293B]">{{ topic.badge }}: {{ topic.topicTitle }}</div>
+          <div class="text-[11px] text-[#64748B]">Lead Author: {{ authorName }} • Directus CMS &amp; SQLite 3</div>
+        </div>
+      </div>
+      <div class="text-right text-[11px]">
+        &copy; 2026 {{ authorName }}. Node-RED Educational Curriculum.
+      </div>
+    </div>
+  </footer>
+
+</div>

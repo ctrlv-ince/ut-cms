@@ -90,3 +90,28 @@
 .animate-pulse-subtle {
   animation: pulse-subtle 2s infinite ease-in-out;
 }
+
+/* Smooth HTML scroll behavior */
+html {
+  scroll-behavior: smooth;
+}
+
+/* Dashboard iframe transitions & animations */
+.dashboard-iframe-container {
+  transition: all 0.3s ease;
+}
+
+.fullscreen-enter {
+  animation: fadeIn 0.2s cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+@keyframes fadeIn {
+  from {
+    opacity: 0;
+    transform: scale(0.99);
+  }
+  to {
+    opacity: 1;
+    transform: scale(1);
+  }
+}
