@@ -5,7 +5,7 @@ const cors = require('cors');
 const path = require('path');
 const multer = require('multer');
 const { KnexService } = require('@feathersjs/knex');
-const { db } = require('./db');
+const { db, readingsDb } = require('./db');
 
 // Multer storage for media uploads
 const uploadsDir = path.resolve(__dirname, '../public/uploads');
@@ -82,7 +82,7 @@ async function logActivityHook(context) {
   return context;
 }
 
-// Register SQLite Knex Services
+// Register SQLite Knex Services (Main CMS Database: cms.sqlite)
 const collectionsList = [
   { name: 'articles', path: 'api/articles' },
   { name: 'services', path: 'api/services' },
@@ -111,6 +111,14 @@ collectionsList.forEach(col => {
     }
   });
 });
+
+// Register Sensor Readings Service (Separate Database: readings.sqlite)
+app.use('api/readings', new KnexService({
+  Model: readingsDb,
+  name: 'readings',
+  paginate: false,
+  multi: true
+}));
 
 // Custom Dashboard Stats Service (Directus Insights)
 app.use('api/stats', {
@@ -160,16 +168,18 @@ app.use('api/stats', {
 // Directus Dynamic Schema Inspector Service
 app.use('api/schema', {
   async find() {
-    const tables = ['articles', 'services', 'team', 'inquiries', 'media', 'settings', 'collections_meta', 'activity_log'];
+    const tables = ['articles', 'services', 'team', 'inquiries', 'media', 'settings', 'collections_meta', 'activity_log', 'readings'];
     const schemaDetails = [];
 
     for (const table of tables) {
-      const columnInfo = await db(table).columnInfo();
+      const targetDb = table === 'readings' ? readingsDb : db;
+      const columnInfo = await targetDb(table).columnInfo();
       const meta = await db('collections_meta').where('id', table).first();
-      const [countResult] = await db(table).count('* as count');
+      const [countResult] = await targetDb(table).count('* as count');
 
       schemaDetails.push({
         table,
+        database: table === 'readings' ? 'readings.sqlite' : 'cms.sqlite',
         meta: meta ? { ...meta, fields: typeof meta.fields === 'string' ? JSON.parse(meta.fields) : meta.fields } : null,
         columns: columnInfo,
         itemCount: Number(countResult.count)
@@ -177,7 +187,7 @@ app.use('api/schema', {
     }
 
     return {
-      database: 'cms.sqlite',
+      database: 'cms.sqlite + readings.sqlite',
       collections: schemaDetails
     };
   }

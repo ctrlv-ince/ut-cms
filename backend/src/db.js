@@ -20,6 +20,15 @@ const db = knex({
   useNullAsDefault: true
 });
 
+// Separate database for ESP32 MQTT sensor readings (readings.sqlite)
+const readingsDb = knex({
+  client: 'sqlite3',
+  connection: {
+    filename: path.join(dbDir, 'readings.sqlite')
+  },
+  useNullAsDefault: true
+});
+
 async function initializeDatabase() {
   // 1. Collections Meta (Directus Schema / Collection Registry)
   const hasCollections = await db.schema.hasTable('collections_meta');
@@ -174,10 +183,27 @@ async function initializeDatabase() {
     });
   }
 
-  console.log('[SQLite DB] Schema tables verified & ready.');
+  console.log('[SQLite DB] CMS schema tables verified & ready.');
+
+  // ---- Initialize Readings Database (separate file: readings.sqlite) ----
+  const hasReadings = await readingsDb.schema.hasTable('readings');
+  if (!hasReadings) {
+    await readingsDb.schema.createTable('readings', (table) => {
+      table.increments('id').primary();
+      table.float('distance_cm');
+      table.integer('soil_percent');
+      table.integer('tds_ppm');
+      table.integer('rssi');
+      table.string('status').defaultTo('NORMAL'); // NORMAL, WARNING, CRITICAL
+      table.timestamp('created_at').defaultTo(readingsDb.fn.now());
+    });
+    console.log('[SQLite DB] Created readings table in readings.sqlite.');
+  }
+  console.log('[SQLite DB] Readings database verified & ready.');
 }
 
 module.exports = {
   db,
+  readingsDb,
   initializeDatabase
 };
