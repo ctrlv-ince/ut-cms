@@ -192,12 +192,19 @@ async function initializeDatabase() {
       table.increments('id').primary();
       table.float('distance_cm');
       table.integer('soil_percent');
-      table.integer('tds_ppm');
+      table.float('light_lux');
       table.integer('rssi');
       table.string('status').defaultTo('NORMAL'); // NORMAL, WARNING, CRITICAL
       table.timestamp('created_at').defaultTo(readingsDb.fn.now());
     });
     console.log('[SQLite DB] Created readings table in readings.sqlite.');
+  }
+  const hasLightLux = await readingsDb.schema.hasColumn('readings', 'light_lux');
+  if (!hasLightLux) {
+    await readingsDb.schema.alterTable('readings', (table) => {
+      table.float('light_lux');
+    });
+    console.log('[SQLite DB] Added light_lux to readings table.');
   }
   console.log('[SQLite DB] Readings database verified & ready.');
 }

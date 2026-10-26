@@ -257,7 +257,7 @@
                   <div class="flex items-center gap-2.5">
                     <div class="w-6 h-6 rounded bg-rose-100 text-[#E11D48] flex items-center justify-center font-bold text-[10px]">NR</div>
                     <div>
-                      <div class="font-bold text-[#1E293B]">Node-RED: Ultrasonic • Soil • TDS</div>
+                      <div class="font-bold text-[#1E293B]">Node-RED: Ultrasonic • Soil • Light</div>
                       <div class="text-[10px] text-[#64748B]">Threshold Analysis &amp; Dashboard Sinks</div>
                     </div>
                   </div>
@@ -504,9 +504,9 @@
             <span class="text-blue-300">•</span>
             <span>Firmware by <strong class="text-blue-900 font-bold">David, Lance B.</strong></span>
           </div>
-          <h2 class="text-2xl sm:text-3xl font-extrabold text-[#1E293B] mt-1">ESP32 Multi-Sensor Edge Firmware &amp; Pipeline</h2>
+          <h2 class="text-2xl sm:text-3xl font-extrabold text-[#1E293B] mt-1">ESP32 BH1750 Light Sensor Sketch &amp; Integration</h2>
           <p class="text-[#64748B] text-sm mt-1 max-w-3xl">
-            C++ edge firmware engineered by <strong class="text-[#1E293B] font-semibold">David, Lance B.</strong> for ESP32. Acquires real-time physical telemetry from Ultrasonic (HC-SR04), Soil Moisture, and Analog TDS water quality sensors, streaming structured JSON over Wi-Fi via MQTT to Mosquitto and Node-RED.
+            C++ edge firmware engineered by <strong class="text-[#1E293B] font-semibold">David, Lance B.</strong> for ESP32. Acquires real-time physical telemetry from Ultrasonic (HC-SR04), Soil Moisture, and a BH1750 light sensor. The BH1750 sketch reads illuminance over I²C and reports each reading in lux over Serial.
           </p>
         </div>
 
@@ -554,7 +554,7 @@
             <div class="bg-slate-50 p-3 rounded-xl border border-slate-200 space-y-1.5 text-xs font-mono mb-4">
               <div class="text-[10px] text-[#64748B] uppercase font-bold tracking-wider">Telemetry Metric</div>
               <div class="text-base font-extrabold text-blue-600">distance_cm</div>
-              <div class="text-[11px] text-slate-600">Formula: <span class="text-blue-700">duration × 0.0343 / 2.0</span></div>
+              <div class="text-[11px] text-slate-600">Continuous high-resolution mode; readings reported in lux.</div>
             </div>
           </div>
           <div class="pt-3 border-t border-[#E2E8F0] flex items-center justify-between text-[11px] text-[#64748B]">
@@ -593,12 +593,12 @@
           </div>
         </div>
 
-        <!-- Card 3: TDS Water Quality -->
+        <!-- Card 3: BH1750 Light Sensor -->
         <div class="bg-white rounded-2xl border border-[#E2E8F0] p-6 shadow-sm hover:shadow-md transition-all flex flex-col justify-between">
           <div>
             <div class="flex items-center justify-between mb-3">
               <span class="px-2.5 py-0.5 rounded-full text-[11px] font-bold bg-cyan-50 text-cyan-700 border border-cyan-200">
-                Pin: ADC1 - GPIO 35 (Wi-Fi Safe)
+                I²C: SDA GPIO 21 / SCL GPIO 22
               </span>
               <span class="w-2.5 h-2.5 rounded-full bg-cyan-500"></span>
             </div>
@@ -606,20 +606,20 @@
               <div class="w-8 h-8 rounded-lg bg-cyan-50 text-cyan-600 flex items-center justify-center font-bold text-xs">
                 💧
               </div>
-              <h4 class="text-sm font-bold text-[#1E293B]">Analog TDS Water Sensor</h4>
+              <h4 class="text-sm font-bold text-[#1E293B]">BH1750 Light Sensor</h4>
             </div>
             <p class="text-xs text-[#64748B] mb-4 leading-relaxed">
-              Analyzes Total Dissolved Solids in parts per million (PPM) via 3rd-degree polynomial equation on 3.3V ADC voltage.
+              Measures ambient illuminance in lux using the BH1750 digital sensor over I²C.
             </p>
             <div class="bg-slate-50 p-3 rounded-xl border border-slate-200 space-y-1.5 text-xs font-mono mb-4">
               <div class="text-[10px] text-[#64748B] uppercase font-bold tracking-wider">Telemetry Metrics</div>
-              <div class="text-base font-extrabold text-cyan-600">tds_ppm <span class="text-xs text-slate-500 font-normal">&amp; tds_voltage</span></div>
-              <div class="text-[11px] text-slate-600">Formula: <span class="text-cyan-700">(133.4V³ - 255.8V² + 857.4V)×0.5</span></div>
+              <div class="text-base font-extrabold text-cyan-600">light_lux</div>
+              <div class="text-[11px] text-slate-600">Continuous high-resolution mode; readings reported in lux.</div>
             </div>
           </div>
           <div class="pt-3 border-t border-[#E2E8F0] flex items-center justify-between text-[11px] text-[#64748B]">
-            <span>Channel: ADC1_CH7</span>
-            <span class="font-bold text-emerald-600">Calculated</span>
+            <span>I²C address: 0x23 (default)</span>
+            <span class="font-bold text-emerald-600">Digital</span>
           </div>
         </div>
 
@@ -670,8 +670,8 @@
               [class.text-[#64748B]]="selectedFirmwareTab() !== 'code'"
               class="px-3.5 py-1.5 rounded-lg text-xs font-bold border border-transparent transition-all flex items-center gap-2">
               <svg class="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 20l4-16m4 4l4 4-4 4M6 16l-4-4 4-4" /></svg>
-              <span>Complete ESP32 C++ Code</span>
-              <span class="text-[10px] bg-blue-100 text-blue-700 px-1.5 py-0.2 rounded font-mono">190 lines</span>
+              <span>BH1750 ESP32 Sketch</span>
+              <span class="text-[10px] bg-blue-100 text-blue-700 px-1.5 py-0.2 rounded font-mono">31 lines</span>
             </button>
 
             <button
@@ -683,7 +683,7 @@
               [class.text-[#64748B]]="selectedFirmwareTab() !== 'payload'"
               class="px-3.5 py-1.5 rounded-lg text-xs font-bold border border-transparent transition-all flex items-center gap-2">
               <svg class="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16m-7 6h7" /></svg>
-              <span>MQTT JSON Payload</span>
+              <span>Example MQTT JSON Payload</span>
             </button>
 
             <button
@@ -737,13 +737,13 @@
           </div>
         }
 
-        <!-- TAB 2: MQTT JSON Payload Inspector -->
+        <!-- TAB 2: Example MQTT JSON Payload Inspector -->
         @if (selectedFirmwareTab() === 'payload') {
           <div class="p-6 sm:p-8 space-y-6">
             <div>
               <h3 class="text-base font-bold text-[#1E293B] mb-1">MQTT Payload Schema: Topic <code class="text-blue-600 bg-blue-50 px-2 py-0.5 rounded font-mono">esp32/sensor_data</code></h3>
               <p class="text-xs text-[#64748B]">
-                This is the exact JSON structure serialized by the ESP32 function <code class="font-mono text-slate-700">publishSensorData()</code> and published to Mosquitto every 5 seconds.
+                Example integration payload for a Node-RED flow. The standalone BH1750 sketch above reports readings over Serial.
               </p>
             </div>
 
@@ -758,9 +758,7 @@
   <span class="text-sky-300">"distance_cm"</span>: <span class="text-emerald-300">18.42</span>,
   <span class="text-sky-300">"soil_raw"</span>: <span class="text-emerald-300">1840</span>,
   <span class="text-sky-300">"soil_percent"</span>: <span class="text-emerald-300">64</span>,
-  <span class="text-sky-300">"tds_raw"</span>: <span class="text-emerald-300">1210</span>,
-  <span class="text-sky-300">"tds_voltage"</span>: <span class="text-emerald-300">0.975</span>,
-  <span class="text-sky-300">"tds_ppm"</span>: <span class="text-emerald-300">352</span>,
+  <span class="text-sky-300">"light_lux"</span>: <span class="text-emerald-300">352.00</span>,
   <span class="text-sky-300">"rssi"</span>: <span class="text-rose-300">-58</span>
 &#125;</code></pre>
                 <div class="mt-4 pt-3 border-t border-slate-800 text-[11px] text-slate-400 flex items-center justify-between">
@@ -801,16 +799,10 @@
                         <td class="p-3 text-slate-600">Irrigation logic switch &amp; line chart</td>
                       </tr>
                       <tr class="hover:bg-slate-50">
-                        <td class="p-3 font-mono font-bold text-cyan-600">tds_voltage</td>
-                        <td class="p-3 text-slate-500 font-mono">Float (0-3.3V)</td>
-                        <td class="p-3">Analog voltage on Pin 35 calculated from 12-bit ADC.</td>
-                        <td class="p-3 text-slate-600">Diagnostic verification</td>
-                      </tr>
-                      <tr class="hover:bg-slate-50">
-                        <td class="p-3 font-mono font-bold text-cyan-600">tds_ppm</td>
-                        <td class="p-3 text-slate-500 font-mono">Float (PPM)</td>
-                        <td class="p-3">Total Dissolved Solids in PPM computed via polynomial.</td>
-                        <td class="p-3 text-slate-600">Water quality gauge (Normal &lt; 300 PPM)</td>
+                        <td class="p-3 font-mono font-bold text-cyan-600">light_lux</td>
+                        <td class="p-3 text-slate-500 font-mono">Float (lux)</td>
+                        <td class="p-3">Ambient illuminance measured by the BH1750 over I²C.</td>
+                        <td class="p-3 text-slate-600">Light intensity gauge and history chart</td>
                       </tr>
                       <tr class="hover:bg-slate-50">
                         <td class="p-3 font-mono font-bold text-purple-600">rssi</td>
@@ -832,7 +824,7 @@
             <div>
               <h3 class="text-base font-bold text-[#1E293B] mb-1">ESP32 Pinout &amp; Peripheral Wiring Map</h3>
               <p class="text-xs text-[#64748B]">
-                Hardware pin assignment designed by <strong class="text-[#1E293B] font-semibold">David, Lance B.</strong> Specially configured using ADC1 pins to ensure uninterrupted Wi-Fi transmission.
+                Hardware pin assignment designed by <strong class="text-[#1E293B] font-semibold">David, Lance B.</strong> BH1750 uses I²C on GPIO 21 and GPIO 22.
               </p>
             </div>
 
@@ -868,9 +860,15 @@
                       <td class="p-3 font-mono">3.3V</td>
                     </tr>
                     <tr>
-                      <td class="p-3 font-bold">Analog TDS Sensor</td>
-                      <td class="p-3 font-mono text-cyan-600 font-bold">GPIO 35 (ADC1_CH7)</td>
-                      <td class="p-3">Analog Input (12-bit ADC)</td>
+                      <td class="p-3 font-bold">BH1750 SDA</td>
+                      <td class="p-3 font-mono text-cyan-600 font-bold">GPIO 21</td>
+                      <td class="p-3">I²C Data</td>
+                      <td class="p-3 font-mono">3.3V</td>
+                    </tr>
+                    <tr>
+                      <td class="p-3 font-bold">BH1750 SCL</td>
+                      <td class="p-3 font-mono text-cyan-600 font-bold">GPIO 22</td>
+                      <td class="p-3">I²C Clock</td>
                       <td class="p-3 font-mono">3.3V</td>
                     </tr>
                     <tr>
@@ -891,16 +889,16 @@
                 </div>
                 <div class="space-y-2 text-[#334155] leading-relaxed">
                   <p>
-                    <strong class="text-blue-950 font-bold">1. ADC1 vs. ADC2 Selection:</strong>
-                    The ESP32 possesses two SAR analog-to-digital converters (ADC1 and ADC2). When Wi-Fi is actively running, the ESP32 Wi-Fi driver takes exclusive control over ADC2. By assigning Soil Moisture to <code class="font-mono bg-white px-1 py-0.5 rounded text-blue-700">GPIO 34</code> and TDS to <code class="font-mono bg-white px-1 py-0.5 rounded text-blue-700">GPIO 35</code>, both sensors run on <strong class="text-blue-950 font-bold">ADC1</strong>, guaranteeing uninterrupted simultaneous analog sampling while Wi-Fi transmits.
+                    <strong class="text-blue-950 font-bold">1. BH1750 I²C Wiring:</strong>
+                    Connect BH1750 SDA to GPIO 21 and SCL to GPIO 22; connect VCC to 3.3V and GND to GND.
                   </p>
                   <p>
                     <strong class="text-blue-950 font-bold">2. Non-Blocking Loop:</strong>
-                    The firmware uses <code class="font-mono bg-white px-1 py-0.5 rounded text-blue-700">millis()</code> timers for Wi-Fi reconnect (10s), MQTT reconnect (5s), and data publishing (5s) without calling <code class="font-mono bg-white px-1 py-0.5 rounded text-blue-700">delay()</code>, keeping the MQTT keep-alive loop responding in real-time.
+                    The sketch checks the BH1750 every second and prints its reading in lux over Serial.
                   </p>
                   <p>
-                    <strong class="text-blue-950 font-bold">3. Last Will &amp; Testament (LWT):</strong>
-                    Mosquitto is instructed to publish <code class="font-mono bg-white px-1 py-0.5 rounded text-slate-800">"offline"</code> to topic <code class="font-mono bg-white px-1 py-0.5 rounded text-slate-800">esp32/status</code> if the ESP32 node experiences unexpected power loss or packet drop.
+                    <strong class="text-blue-950 font-bold">3. I²C Address:</strong>
+                    The BH1750 commonly uses I²C address 0x23; some modules can use 0x5C.
                   </p>
                 </div>
               </div>
@@ -1488,7 +1486,7 @@
             How I Setup &amp; Displayed Real Sensor Data via MQTT on Node-RED Dashboard
           </h2>
           <p class="text-[#64748B] text-sm mt-2 leading-relaxed">
-            A comprehensive, verified 14-step implementation guide covering palette installation, broker configuration, 4-way payload distribution in JavaScript, and real-time dashboard widgets for ultrasonic distance, soil moisture, and TDS water purity.
+            A comprehensive, verified 14-step implementation guide covering palette installation, broker configuration, 4-way payload distribution in JavaScript, and real-time dashboard widgets for ultrasonic distance, soil moisture, and Light water purity.
           </p>
         </div>
 

@@ -296,27 +296,27 @@ export class WebsiteComponent implements OnInit, OnDestroy {
         { label: 'Wiring', value: 'Wire mqtt in node output to function node input' }
       ],
       imageName: 'step-6.jpg',
-      tip: 'Configuring 4 outputs provides dedicated wiring pins for Distance, Soil Moisture, TDS, and RSSI telemetry streams.'
+      tip: 'Configuring 4 outputs provides dedicated wiring pins for Distance, Soil Moisture, Light, and RSSI telemetry streams.'
     },
     {
       id: 7,
       title: 'Paste Telemetry Routing Script',
       category: 'Data Processing',
       badge: 'Step 7 • JavaScript',
-      instruction: 'Paste this into the On Message tab:\n\nconst d = msg.payload;\n\nreturn [\n  { payload: d.distance_cm === null ? "No echo" : d.distance_cm.toFixed(1) + " cm" },\n  { payload: d.soil_percent },\n  { payload: d.tds_ppm },\n  { payload: d.rssi }\n];',
+      instruction: 'Paste this into the On Message tab:\n\nconst d = msg.payload;\n\nreturn [\n  { payload: d.distance_cm === null ? "No echo" : d.distance_cm.toFixed(1) + " cm" },\n  { payload: d.soil_percent },\n  { payload: d.light_lux },\n  { payload: d.rssi }\n];',
       code: `const d = msg.payload;
 
 return [
   { payload: d.distance_cm === null ? "No echo" : d.distance_cm.toFixed(1) + " cm" },
   { payload: d.soil_percent },
-  { payload: d.tds_ppm },
+  { payload: d.light_lux },
   { payload: d.rssi }
 ];`,
       codeLanguage: 'javascript',
       params: [
         { label: 'Terminal 1', value: 'd.distance_cm ("No echo" or formatted "X.X cm")' },
         { label: 'Terminal 2', value: 'd.soil_percent (0-100% moisture)' },
-        { label: 'Terminal 3', value: 'd.tds_ppm (water purity in ppm)' },
+        { label: 'Terminal 3', value: 'd.light_lux (light intensity in lux)' },
         { label: 'Terminal 4', value: 'd.rssi (Wi-Fi signal strength in dBm)' }
       ],
       imageName: 'step-7.jpg',
@@ -369,30 +369,30 @@ return [
     },
     {
       id: 11,
-      title: 'Output 3 -> TDS Gauge',
+      title: 'Output 3 -> Light Intensity Gauge',
       category: 'UI Widgets & History',
       badge: 'Step 11 • Output 3',
-      instruction: 'Output 3 -> Gauge widget Label: “TDS”, range 0 to 1000, unit ppm',
+      instruction: 'Output 3 -> Gauge widget Label: “Light Intensity”, range 0 to 10000, unit lux',
       params: [
-        { label: 'Source', value: 'Function Output 3 (TDS)' },
+        { label: 'Source', value: 'Function Output 3 (Light)' },
         { label: 'Widget Type', value: 'ui-gauge' },
-        { label: 'Label', value: 'TDS' },
-        { label: 'Range', value: '0 to 1000' },
-        { label: 'Unit', value: 'ppm' }
+        { label: 'Label', value: 'Light Intensity' },
+        { label: 'Range', value: '0 to 10000' },
+        { label: 'Unit', value: 'lux' }
       ],
       imageName: 'step-11.jpg',
-      tip: 'Wire Output 3 to this gauge. Tracks water minerals and nutrient concentration in parts per million.'
+      tip: 'Wire Output 3 to this gauge. Tracks ambient illuminance in lux.'
     },
     {
       id: 12,
-      title: 'Output 3 -> TDS History Chart',
+      title: 'Output 3 -> Light History Chart',
       category: 'UI Widgets & History',
       badge: 'Step 12 • Output 3',
-      instruction: 'Output 3 -> Chart widget Label: “TDS history”, type Line, X-axis: last 10 seconds',
+      instruction: 'Output 3 -> Chart widget Label: “Light Intensity history”, type Line, X-axis: last 10 seconds',
       params: [
-        { label: 'Source', value: 'Function Output 3 (TDS - branched wire)' },
+        { label: 'Source', value: 'Function Output 3 (Light - branched wire)' },
         { label: 'Widget Type', value: 'ui-chart' },
-        { label: 'Label', value: 'TDS history' },
+        { label: 'Label', value: 'Light Intensity history' },
         { label: 'Type', value: 'Line' },
         { label: 'X-axis Window', value: 'last 10 seconds' }
       ],
@@ -442,7 +442,7 @@ return [
     protocol: 'Internal Event Loop / Node.js Engine',
     responsibilities: [
       'Subscribe to MQTT sensor topics (esp32/sensor_data)',
-      'Apply moving-average smoothing to Ultrasonic, Soil, and TDS telemetry',
+      'Apply moving-average smoothing to Ultrasonic, Soil, and Light telemetry',
       'Execute threshold switch rules and hazard triggers',
       'Forward alerts to Feathers REST API and SQLite',
       'Serve live dashboard at /dashboard'
@@ -450,240 +450,36 @@ return [
     communicates: ['Mosquitto MQTT Broker (inbound)', 'FeathersJS API (outbound HTTP)', 'Angular Dashboard (WebSocket/iframe)']
   });
 
-  readonly esp32Code: string = `#include <WiFi.h>
-#include <PubSubClient.h>   // Library: "PubSubClient" by Nick O'Leary
-
-// ==================================
-// CONFIGURATION
-// ==================================
-const char* WIFI_SSID     = "YOUR_WIFI_SSID";
-const char* WIFI_PASSWORD = "YOUR_WIFI_PASSWORD";
-
-const char* MQTT_BROKER   = "YOUR_RASPBERRY_PI_IP";
-const int   MQTT_PORT     = 1883;
-const char* MQTT_TOPIC    = "esp32/sensor_data";
-const char* MQTT_STATUS_TOPIC = "esp32/status";   // online/offline (Last Will)
-const char* MQTT_CLIENT_ID    = "esp32-sensor-node";
-
-// If your Mosquitto broker requires a login, fill these in.
-// Leave MQTT_USER as "" for anonymous access.
-const char* MQTT_USER     = "";
-const char* MQTT_PASS     = "";
-
-const unsigned long PUBLISH_INTERVAL_MS = 5000;   // publish every 5 seconds
-const unsigned long WIFI_RETRY_MS       = 10000;  // retry Wi-Fi every 10 s
-const unsigned long MQTT_RETRY_MS       = 5000;   // retry MQTT every 5 s
-
-// ==================================
-// PINS
-// ==================================
-const int trigPin = 25;
-const int echoPin = 26;
-
-const int soilPin = 34;   // ADC1 - safe to use with Wi-Fi
-const int tdsPin  = 35;   // ADC1 - safe to use with Wi-Fi
-
-// Soil moisture calibration values
-int soilDry = 3000;
-int soilWet = 1200;
-
-// ==================================
-// GLOBALS
-// ==================================
-WiFiClient   wifiClient;
-PubSubClient mqttClient(wifiClient);
-
-unsigned long lastPublish   = 0;
-unsigned long lastWifiTry   = 0;
-unsigned long lastMqttTry   = 0;
-
-// ==================================
-// WI-FI
-// ==================================
-void connectWiFi() {
-  Serial.print("Connecting to Wi-Fi: ");
-  Serial.println(WIFI_SSID);
-
-  WiFi.mode(WIFI_STA);
-  WiFi.setAutoReconnect(true);
-  WiFi.persistent(false);
-  WiFi.begin(WIFI_SSID, WIFI_PASSWORD);
-
-  // Wait up to 15 s on first boot; loop() handles later drops without blocking
-  unsigned long start = millis();
-  while (WiFi.status() != WL_CONNECTED && millis() - start < 15000) {
-    delay(500);
-    Serial.print(".");
-  }
-  Serial.println();
-
-  if (WiFi.status() == WL_CONNECTED) {
-    Serial.print("Wi-Fi connected. IP: ");
-    Serial.println(WiFi.localIP());
-  } else {
-    Serial.println("Wi-Fi not connected yet, will keep retrying...");
-  }
-}
-
-void maintainWiFi() {
-  if (WiFi.status() == WL_CONNECTED) return;
-
-  unsigned long now = millis();
-  if (now - lastWifiTry >= WIFI_RETRY_MS) {
-    lastWifiTry = now;
-    Serial.println("Wi-Fi lost. Reconnecting...");
-    WiFi.disconnect();
-    WiFi.begin(WIFI_SSID, WIFI_PASSWORD);
-  }
-}
-
-// ==================================
-// MQTT
-// ==================================
-bool connectMQTT() {
-  Serial.print("Connecting to MQTT broker ");
-  Serial.print(MQTT_BROKER);
-  Serial.print("... ");
-
-  bool ok;
-  if (strlen(MQTT_USER) > 0) {
-    ok = mqttClient.connect(MQTT_CLIENT_ID, MQTT_USER, MQTT_PASS,
-                            MQTT_STATUS_TOPIC, 1, true, "offline");
-  } else {
-    ok = mqttClient.connect(MQTT_CLIENT_ID, nullptr, nullptr,
-                            MQTT_STATUS_TOPIC, 1, true, "offline");
-  }
-
-  if (ok) {
-    Serial.println("connected.");
-    mqttClient.publish(MQTT_STATUS_TOPIC, "online", true);
-  } else {
-    Serial.print("failed, rc=");
-    Serial.println(mqttClient.state());
-  }
-  return ok;
-}
-
-void maintainMQTT() {
-  if (WiFi.status() != WL_CONNECTED) return;
-  if (mqttClient.connected()) return;
-
-  unsigned long now = millis();
-  if (now - lastMqttTry >= MQTT_RETRY_MS) {
-    lastMqttTry = now;
-    connectMQTT();
-  }
-}
-
-// ==================================
-// SENSORS
-// ==================================
-float readDistanceCm(bool &valid) {
-  digitalWrite(trigPin, LOW);
-  delayMicroseconds(5);
-  digitalWrite(trigPin, HIGH);
-  delayMicroseconds(10);
-  digitalWrite(trigPin, LOW);
-
-  long duration = pulseIn(echoPin, HIGH, 30000);
-
-  if (duration > 0) {
-    valid = true;
-    return duration * 0.0343 / 2.0;
-  }
-  valid = false;
-  return -1;
-}
-
-void publishSensorData() {
-  // 1. Ultrasonic
-  bool distValid;
-  float distanceCm = readDistanceCm(distValid);
-
-  // 2. Soil moisture
-  int soilRaw = analogRead(soilPin);
-  int soilPercent = map(
-    constrain(soilRaw, soilWet, soilDry),
-    soilDry,
-    soilWet,
-    0,
-    100
-  );
-
-  // 3. TDS
-  int tdsRaw = analogRead(tdsPin);
-  float voltage = tdsRaw * 3.3 / 4095.0;
-  float tdsPPM = (133.42 * voltage * voltage * voltage
-                - 255.86 * voltage * voltage
-                + 857.39 * voltage) * 0.5;
-  if (tdsPPM < 0) tdsPPM = 0;
-
-  // Build JSON (distance_cm is null when there is no echo)
-  char distStr[16];
-  if (distValid) snprintf(distStr, sizeof(distStr), "%.2f", distanceCm);
-  else           snprintf(distStr, sizeof(distStr), "null");
-
-  char payload[320];
-  snprintf(payload, sizeof(payload),
-           "{\\"distance_cm\\":%s,"
-           "\\"soil_raw\\":%d,\\"soil_percent\\":%d,"
-           "\\"tds_raw\\":%d,\\"tds_voltage\\":%.3f,\\"tds_ppm\\":%.0f,"
-           "\\"rssi\\":%d}",
-           distStr,
-           soilRaw, soilPercent,
-           tdsRaw, voltage, tdsPPM,
-           WiFi.RSSI());
-
-  Serial.print("Publishing to ");
-  Serial.print(MQTT_TOPIC);
-  Serial.print(": ");
-  Serial.println(payload);
-
-  if (!mqttClient.publish(MQTT_TOPIC, payload)) {
-    Serial.println("Publish failed.");
-  }
-}
-
-// ==================================
-// SETUP / LOOP
-// ==================================
+  readonly esp32Code: string = `#include <Wire.h>
+#include <BH1750.h>
+BH1750 lightMeter;
 void setup() {
   Serial.begin(115200);
   delay(1000);
-
-  pinMode(trigPin, OUTPUT);
-  pinMode(echoPin, INPUT);
-  analogReadResolution(12);
-
-  Serial.println();
-  Serial.println("==================================");
-  Serial.println(" ESP32 SENSOR NODE - MQTT");
-  Serial.println(" Ultrasonic | Soil Moisture | TDS");
-  Serial.println("==================================");
-
-  connectWiFi();
-
-  mqttClient.setServer(MQTT_BROKER, MQTT_PORT);
-  mqttClient.setBufferSize(512);
-  mqttClient.setKeepAlive(30);
-}
-
-void loop() {
-  maintainWiFi();
-  maintainMQTT();
-  mqttClient.loop();   // keeps the MQTT connection alive
-
-  unsigned long now = millis();
-  if (now - lastPublish >= PUBLISH_INTERVAL_MS) {
-    lastPublish = now;
-
-    if (mqttClient.connected()) {
-      publishSensorData();
-    } else {
-      Serial.println("MQTT offline, skipping publish.");
+  Wire.begin(21, 22);
+  Serial.println("ESP32 LIGHT SENSOR - BH1750");
+  Serial.println("---------------------------");
+  if (lightMeter.begin(BH1750::CONTINUOUS_HIGH_RES_MODE)) {
+    Serial.println("BH1750 sensor ready!");
+  } else {
+    Serial.println("ERROR: BH1750 not detected!");
+    Serial.println("Check SDA, SCL, VCC, and GND.");
+    while (1) {
+      delay(100);
     }
   }
-}`;
+}
+void loop() {
+  float lux = lightMeter.readLightLevel();
+  if (lux >= 0) {
+    Serial.print("Light Intensity: ");
+    Serial.print(lux, 2);
+    Serial.println(" lux");
+  } else {
+    Serial.println("Failed to read light sensor!");
+  }
+  delay(1000);
+}`
 
   copyEsp32Code() {
     if (typeof navigator !== 'undefined' && navigator.clipboard) {
@@ -1304,16 +1100,13 @@ sudo journalctl -u nodered -f`,
       title: 'Sensor Hardware & ESP32 Edge Node',
       type: 'Physical Hardware Layer',
       color: '#2563EB',
-      description: 'ESP32 microcontroller running C++ edge firmware engineered by David, Lance B. Interfacing Ultrasonic (Trig 25 / Echo 26), Capacitive Soil Moisture (ADC1 GPIO 34), and Analog TDS (ADC1 GPIO 35) sensors, publishing JSON packets every 5 seconds over Wi-Fi.',
-      protocol: 'GPIO Pulse Timing / ADC1 (12-bit) / Wi-Fi 802.11 b/g/n',
+      description: 'ESP32 running the BH1750 light sensor sketch. The sensor connects over I²C (SDA GPIO 21, SCL GPIO 22) and reports illuminance in lux over Serial.',
+      protocol: 'I²C / Serial 115200 baud',
       responsibilities: [
-        'Measure ultrasonic echo timing for distance in cm',
-        'Read and constrain 12-bit ADC soil moisture (0-100% saturation)',
-        'Compute water TDS in PPM using polynomial voltage equation',
-        'Package readings into structured JSON payload on esp32/sensor_data',
-        'Maintain Wi-Fi and MQTT auto-reconnect with Last Will status on esp32/status'
+        'Read ambient illuminance in lux from the BH1750 over I²C',
+        'Report readings over Serial once per second'
       ],
-      communicates: ['Mosquitto MQTT Broker (port 1883, topic: esp32/sensor_data)', 'Wi-Fi Local AP']
+      communicates: ['BH1750 via I²C (GPIO 21/22)', 'Serial Monitor at 115200 baud']
     },
     'mqtt-broker': {
       id: 'mqtt-broker',

@@ -54,7 +54,7 @@ export const TOPIC_CURRICULUM_DATA: Record<number, TopicDetailContent> = {
     topicTitle: 'Risk Monitoring & Environmental Telemetry',
     subtitle: 'Real-time hazard detection, automated multi-tier threshold alerts, and sensor telemetry analysis utilizing Node-RED event processing.',
     heroSummary:
-      'An engineering deep-dive into physical plant safety and environmental telemetry. Ingest real-time analog signals from ESP32 edge nodes (ultrasonic proximity, capacitive soil moisture, analog TDS salinity), apply digital exponential smoothing to eliminate false alarms, evaluate multi-tier risk thresholds (Normal, Warning, Critical), and automate hazard dispatches to SQLite and Directus CMS.',
+      'An engineering deep-dive into physical plant safety and environmental telemetry. Ingest real-time analog signals from ESP32 edge nodes (ultrasonic proximity, capacitive soil moisture, BH1750 ambient light), apply digital exponential smoothing to eliminate false alarms, evaluate multi-tier risk thresholds (Normal, Warning, Critical), and automate hazard dispatches to SQLite and Directus CMS.',
     readingTime: '45 mins • Hands-on Laboratory',
     level: 'Undergraduate & Industrial IoT Systems',
     prerequisites: [
@@ -68,7 +68,7 @@ export const TOPIC_CURRICULUM_DATA: Record<number, TopicDetailContent> = {
         title: 'Multi-Tier Safety Thresholds (Normal, Warning, Critical)',
         badge: 'Condition Logic',
         description:
-          'Configuring hierarchical condition branches in Node-RED switch nodes to categorize telemetry into Normal (Soil 40-70%, TDS < 400 ppm), Warning (Soil 25-40% or 70-85%, TDS 400-800 ppm), and Critical (Soil < 25% dry or TDS > 800 ppm contaminated) states without false alarms.',
+          'Configuring hierarchical condition branches in Node-RED switch nodes to categorize telemetry into Normal (Soil 40-70%, Light < 400 lux), Warning (Soil 25-40% or 70-85%, Light 400-800 lux), and Critical (Soil < 25% dry or Light > 800 lux contaminated) states without false alarms.',
         keyTakeaway:
           'Multi-tier alerting prevents alarm fatigue by differentiating between advisory warnings and actionable critical shutdowns.'
       },
@@ -115,7 +115,7 @@ export const TOPIC_CURRICULUM_DATA: Record<number, TopicDetailContent> = {
       {
         phase: '3. Classification',
         component: 'switch (3-Tier Risk Rules)',
-        description: 'Evaluates soil moisture and TDS salinity against configured thresholds.',
+        description: 'Evaluates soil moisture and low ambient light against configured thresholds.',
         protocol: 'Event Rule Routing'
       },
       {
@@ -138,14 +138,14 @@ const context = flow;
 // Retrieve previous smoothed values from flow memory or initialize
 let smoothed = context.get('smoothed_telemetry') || {
   soil_percent: SENSORS.soil_percent,
-  tds_ppm: SENSORS.tds_ppm,
+  light_lux: SENSORS.light_lux,
   distance_cm: SENSORS.distance_cm || 0
 };
 
 const ALPHA = 0.35; // Smoothing factor (0 = pure historical, 1 = raw instant)
 
 smoothed.soil_percent = Math.round(ALPHA * SENSORS.soil_percent + (1 - ALPHA) * smoothed.soil_percent);
-smoothed.tds_ppm = Math.round(ALPHA * SENSORS.tds_ppm + (1 - ALPHA) * smoothed.tds_ppm);
+smoothed.light_lux = Number((ALPHA * SENSORS.light_lux + (1 - ALPHA) * smoothed.light_lux).toFixed(2));
 
 if (SENSORS.distance_cm !== null && !isNaN(SENSORS.distance_cm)) {
   smoothed.distance_cm = Number((ALPHA * SENSORS.distance_cm + (1 - ALPHA) * smoothed.distance_cm).toFixed(1));
@@ -159,13 +159,13 @@ context.set('smoothed_telemetry', smoothed);
 let riskLevel = 'NORMAL';
 let hazardDetails = [];
 
-// Rule A: Total Dissolved Solids (Water Salinity / Purity)
-if (smoothed.tds_ppm > 800) {
+// Rule A: Low ambient light (lux)
+if (smoothed.light_lux < 20) {
   riskLevel = 'CRITICAL';
-  hazardDetails.push(\`CRITICAL TDS Hazard: \${smoothed.tds_ppm} ppm exceeds 800 ppm threshold!\`);
-} else if (smoothed.tds_ppm > 450) {
+  hazardDetails.push(\`CRITICAL low light: \${smoothed.light_lux} lux is below 20 lux.\`);
+} else if (smoothed.light_lux < 100) {
   riskLevel = 'WARNING';
-  hazardDetails.push(\`WARNING TDS Alert: \${smoothed.tds_ppm} ppm indicates mineral concentration\`);
+  hazardDetails.push(\`WARNING low light: \${smoothed.light_lux} lux is below 100 lux.\`);
 }
 
 // Rule B: Capacitive Soil Moisture (Desiccation / Over-saturation)
@@ -254,9 +254,9 @@ if (riskLevel === 'NORMAL') {
         purpose: 'Corrosion-resistant analog soil permittivity measurement'
       },
       {
-        component: 'Analog TDS Sensor (Total Dissolved Solids)',
-        wiring: 'VCC->3.3V, GND->GND, AOUT->GPIO 35 (ADC1_CH7)',
-        purpose: 'Water conductivity and salt mineral concentration probe'
+        component: 'BH1750 Light Sensor',
+        wiring: 'VCC->3.3V, GND->GND, SDA->GPIO 21, SCL->GPIO 22',
+        purpose: 'Digital ambient illuminance measurement in lux over I²C'
       },
       {
         component: 'HC-SR04 Ultrasonic Distance Sensor',
@@ -272,7 +272,7 @@ if (riskLevel === 'NORMAL') {
         { name: 'id', type: 'INTEGER (Auto Increment)', desc: 'Primary key index for relational audit trail' },
         { name: 'severity', type: 'VARCHAR(20)', desc: 'NORMAL | WARNING | CRITICAL' },
         { name: 'sensor_topic', type: 'VARCHAR(100)', desc: 'Source MQTT topic (esp32/sensor_data)' },
-        { name: 'reading_value', type: 'FLOAT', desc: 'Triggering value (e.g. 845.0 ppm TDS or 18% soil)' },
+        { name: 'reading_value', type: 'FLOAT', desc: 'Triggering value (e.g. 845.0 lux Light or 18% soil)' },
         { name: 'hazard_description', type: 'TEXT', desc: 'Detailed diagnostic explanation generated by Node-RED' },
         { name: 'created_at', type: 'DATETIME', desc: 'ISO 8601 UTC timestamp created automatically' }
       ],
@@ -280,21 +280,21 @@ if (riskLevel === 'NORMAL') {
   "id": 104,
   "severity": "CRITICAL",
   "sensor_topic": "esp32/sensor_data",
-  "reading_value": 862.4,
-  "hazard_description": "CRITICAL TDS Hazard: 862.4 ppm exceeds 800 ppm threshold! Immediate flushing required.",
+  "reading_value": 12.4,
+  "hazard_description": "CRITICAL low light: 12.4 lux is below 20 lux.",
   "created_at": "2026-10-25T10:18:32.000Z"
 }`,
       studioAction: 'View & Filter Incident Logs in Directus Studio'
     },
     labExercise: {
-      title: 'Laboratory Exercise 01: Simulating Water Contamination & Auto-Dispatch',
+      title: 'Laboratory Exercise 01: Simulating Low Light & Auto-Dispatch',
       overview:
         'In this exercise, you will inject anomalous telemetry into the MQTT broker, observe the exponential smoothing curve, verify the multi-tier switch classification, and inspect the incident log generated in Directus CMS.',
       prerequisites: 'Node-RED running at port 1880, Mosquitto MQTT running at port 1883, Directus Studio accessible.',
       steps: [
-        'Publish normal telemetry: mosquitto_pub -h localhost -t esp32/sensor_data -m \'{"soil_percent":65,"tds_ppm":220,"distance_cm":12.5,"rssi":-55}\'',
+        'Publish normal telemetry: mosquitto_pub -h localhost -t esp32/sensor_data -m \'{"soil_percent":65,"light_lux":220,"distance_cm":12.5,"rssi":-55}\'',
         'Verify Output 1 activates and dashboard indicators show Green (NORMAL).',
-        'Simulate water salinity spike: mosquitto_pub -h localhost -t esp32/sensor_data -m \'{"soil_percent":65,"tds_ppm":890,"distance_cm":12.5,"rssi":-55}\'',
+        'Simulate low light: mosquitto_pub -h localhost -t esp32/sensor_data -m \'{"soil_percent":65,"light_lux":5,"distance_cm":12.5,"rssi":-55}\'',
         'Observe the function node dampening the sudden spike before elevating state to CRITICAL.',
         'Confirm Output 3 fires, dispatching an incident payload to FeathersJS and inserting row into SQLite.',
         'Switch to Directus Studio -> Foundational Topics / Database to confirm the incident audit trail.'
@@ -612,53 +612,51 @@ return [msg, null];`,
       }
     ],
     functionScript: `// Parameterized SQL Ingestion Generator for Node-RED SQLite Node
-const data = msg.payload;
+const d = msg.payload;
 
 // Validate and sanitize data types
-const distance = (data.distance_cm === null || isNaN(data.distance_cm)) ? null : parseFloat(data.distance_cm);
-const soil = parseInt(data.soil_percent, 10) || 0;
-const tds = parseInt(data.tds_ppm, 10) || 0;
-const rssi = parseInt(data.rssi, 10) || -99;
-const timestamp = new Date().toISOString();
+const distance = d.distance_cm === null ? null : parseFloat(d.distance_cm);
+const soil = parseInt(d.soil_percent, 10) || 0;
+const light = parseFloat(d.light_lux) || 0;
+const rssi = parseInt(d.rssi, 10) || -99;
 
 // Determine operational status
 let status = 'NORMAL';
-if (tds > 800 || soil < 20) {
+if (light < 20 || soil < 20) {
   status = 'CRITICAL';
-} else if (tds > 450 || soil < 35 || soil > 85) {
+} else if (light < 100 || soil < 35) {
   status = 'WARNING';
 }
 
 // Prepare parameterized SQL statement:
 // Parameterized queries guarantee immunity against SQL injection and optimize query plan caching
 msg.topic = \`
-  INSERT INTO sensor_telemetry (
+  INSERT INTO readings (
     distance_cm,
     soil_percent,
-    tds_ppm,
+    light_lux,
     rssi,
     status,
     created_at
-  ) VALUES (?, ?, ?, ?, ?, ?);
+  ) VALUES (?, ?, ?, ?, ?, datetime('now', 'localtime'));
 \`;
 
 // Array of parameters matching ? placeholders in exact sequence
 msg.payload = [
   distance,
   soil,
-  tds,
+  light,
   rssi,
-  status,
-  timestamp
+  status
 ];
 
-// Return message to Node-RED SQLite node connected to cms.sqlite (WAL enabled)
+// Return message to Node-RED SQLite node connected to readings.sqlite
 return msg;`,
     functionScriptLabel: 'Parameterized SQL Ingestion Script',
     functionScriptNotes: [
       'Using parameterized query syntax (?, ?, ...) prevents SQL injection vulnerabilities.',
       'NULL values for ultrasonic echo timeouts are preserved cleanly in the SQLite database.',
-      'Timestamp is generated in ISO 8601 UTC format for timezone-independent aggregation.'
+      'created_at is set by SQLite using the local time when the row is inserted.'
     ],
     flowJson: `[
   {
@@ -703,14 +701,14 @@ return msg;`,
       }
     ],
     directusIntegration: {
-      tableName: 'sensor_telemetry',
+      tableName: 'readings',
       tableDescription:
         'Core relational table storing every 5-second sensor telemetry record from ESP32 edge nodes.',
       fields: [
         { name: 'id', type: 'INTEGER PRIMARY KEY AUTOINCREMENT', desc: 'Unique record identifier' },
         { name: 'distance_cm', type: 'FLOAT', desc: 'Ultrasonic distance reading in centimeters' },
         { name: 'soil_percent', type: 'INTEGER', desc: 'Soil moisture percentage (0-100%)' },
-        { name: 'tds_ppm', type: 'INTEGER', desc: 'Total dissolved solids water salinity (0-1000 ppm)' },
+        { name: 'light_lux', type: 'FLOAT', desc: 'BH1750 ambient illuminance in lux' },
         { name: 'rssi', type: 'INTEGER', desc: 'Wi-Fi received signal strength indicator in dBm' },
         { name: 'status', type: 'VARCHAR(20)', desc: 'NORMAL | WARNING | CRITICAL' },
         { name: 'created_at', type: 'DATETIME', desc: 'ISO 8601 publication timestamp' }
@@ -719,7 +717,7 @@ return msg;`,
   "id": 8421,
   "distance_cm": 15.2,
   "soil_percent": 62,
-  "tds_ppm": 218,
+  "light_lux": 218,
   "rssi": -52,
   "status": "NORMAL",
   "created_at": "2026-10-25T10:19:40.000Z"
@@ -733,7 +731,7 @@ return msg;`,
       prerequisites: 'SQLite 3 CLI or DB Browser for SQLite, Feathers backend running, Directus Studio active.',
       steps: [
         'Verify WAL mode: sqlite3 backend/cms.sqlite "PRAGMA journal_mode;" (should output: "wal").',
-        'In Node-RED, trigger the Ingestion flow to write 100 rows into sensor_telemetry.',
+        'In Node-RED, trigger the Ingestion flow to write 100 rows into readings.',
         'Concurrently in Directus Studio, navigate to the Foundational Topics / Telemetry collection.',
         'Apply filters: status = "NORMAL" and sort by created_at DESC.',
         'Inspect the filesystem: observe the temporary cms.sqlite-wal journal handling writes concurrently.',

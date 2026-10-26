@@ -12,8 +12,8 @@ Place your 14 landscape screenshots for each step here with the following filena
 - `step-8.png`  (Step 8: Dashboard Page 'Sensors' & Group 'Readings')
 - `step-9.png`  (Step 9: Output 1 Text Widget 'Distance')
 - `step-10.png` (Step 10: Output 2 Gauge Widget 'Soil Moisture')
-- `step-11.png` (Step 11: Output 3 Gauge Widget 'TDS')
-- `step-12.png` (Step 12: Output 3 Chart Widget 'TDS history')
+- `step-11.png` (Step 11: Output 3 Gauge Widget 'Light Intensity')
+- `step-12.png` (Step 12: Output 3 Chart Widget 'Light Intensity history')
 - `step-13.png` (Step 13: Output 2 Chart Widget 'Soil history')
 - `step-14.png` (Step 14: Deploy button & live dashboard verification)
 
