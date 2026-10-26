@@ -205,6 +205,7 @@ async function initializeDatabase() {
       table.float('light_lux');
     });
     console.log('[SQLite DB] Added light_lux to readings table.');
+    console.log('[SQLite DB] Readings database verified & ready.');
   }
   console.log('[SQLite DB] Readings database verified & ready.');
 }
@@ -214,3 +215,5 @@ module.exports = {
   readingsDb,
   initializeDatabase
 };
+
+
