@@ -530,8 +530,8 @@
         </div>
       </div>
 
-      <!-- 4 Hardware Sensor Architecture Cards -->
-      <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6 mb-10">
+      <!-- 5 Hardware and MQTT Architecture Cards -->
+      <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-5 gap-6 mb-10">
 
         <!-- Card 1: Ultrasonic Distance -->
         <div class="bg-white rounded-2xl border border-[#E2E8F0] p-6 shadow-sm hover:shadow-md transition-all flex flex-col justify-between">
@@ -623,12 +623,12 @@
           </div>
         </div>
 
-        <!-- Card 4: MQTT Wi-Fi Gateway -->
+        <!-- Card 4: MQTT Broker -->
         <div class="bg-white rounded-2xl border border-[#E2E8F0] p-6 shadow-sm hover:shadow-md transition-all flex flex-col justify-between">
           <div>
             <div class="flex items-center justify-between mb-3">
               <span class="px-2.5 py-0.5 rounded-full text-[11px] font-bold bg-indigo-50 text-indigo-700 border border-indigo-200">
-                Client: esp32-sensor-node
+                Mosquitto MQTT Broker
               </span>
               <span class="w-2.5 h-2.5 rounded-full bg-indigo-500"></span>
             </div>
@@ -636,20 +636,44 @@
               <div class="w-8 h-8 rounded-lg bg-indigo-50 text-indigo-600 flex items-center justify-center font-bold text-xs">
                 📶
               </div>
-              <h4 class="text-sm font-bold text-[#1E293B]">MQTT / Wi-Fi Pipeline</h4>
+              <h4 class="text-sm font-bold text-[#1E293B]">MQTT Broker</h4>
             </div>
             <p class="text-xs text-[#64748B] mb-4 leading-relaxed">
-              Non-blocking connection watchdog for Wi-Fi and Mosquitto broker (Port 1883). Transmits RSSI diagnostic signal every 5s.
+              Mosquitto routes telemetry published by the ESP32 to connected MQTT clients.
             </p>
             <div class="bg-slate-50 p-3 rounded-xl border border-slate-200 space-y-1.5 text-xs font-mono mb-4">
-              <div class="text-[10px] text-[#64748B] uppercase font-bold tracking-wider">Network &amp; Status</div>
-              <div class="text-base font-extrabold text-indigo-600">WiFi.RSSI() <span class="text-xs text-slate-500 font-normal">dBm</span></div>
+              <div class="text-[10px] text-[#64748B] uppercase font-bold tracking-wider">Broker Endpoint</div>
+              <div class="text-base font-extrabold text-indigo-600">MQTT <span class="text-xs text-slate-500 font-normal">TCP</span></div>
               <div class="text-[11px] text-slate-600">Broker: <span class="text-indigo-700">Port 1883 • Buffer 512B</span></div>
             </div>
           </div>
           <div class="pt-3 border-t border-[#E2E8F0] flex items-center justify-between text-[11px] text-[#64748B]">
             <span>KeepAlive: 30s</span>
-            <span class="font-bold text-emerald-600">Auto-Reconnect</span>
+            <span class="font-bold text-indigo-600">Message Routing</span>
+          </div>
+        </div>
+
+        <!-- Card 5: MQTT Subscriber -->
+        <div class="bg-white rounded-2xl border border-[#E2E8F0] p-6 shadow-sm hover:shadow-md transition-all flex flex-col justify-between">
+          <div>
+            <div class="flex items-center justify-between mb-3">
+              <span class="px-2.5 py-0.5 rounded-full text-[11px] font-bold bg-violet-50 text-violet-700 border border-violet-200">MQTT Client</span>
+              <span class="w-2.5 h-2.5 rounded-full bg-violet-500"></span>
+            </div>
+            <div class="flex items-center gap-2 mb-2">
+              <div class="w-8 h-8 rounded-lg bg-violet-50 text-violet-600 flex items-center justify-center font-bold text-xs">↓</div>
+              <h4 class="text-sm font-bold text-[#1E293B]">MQTT Subscriber</h4>
+            </div>
+            <p class="text-xs text-[#64748B] mb-4 leading-relaxed">Subscribes to the ESP32 telemetry and status topics to receive sensor readings and node availability updates.</p>
+            <div class="bg-slate-50 p-3 rounded-xl border border-slate-200 space-y-1.5 text-xs font-mono mb-4">
+              <div class="text-[10px] text-[#64748B] uppercase font-bold tracking-wider">Subscribed Topics</div>
+              <div class="text-sm font-extrabold text-violet-600">esp32/sensor_data</div>
+              <div class="text-[11px] text-slate-600">Also listens: <span class="text-violet-700">esp32/status</span></div>
+            </div>
+          </div>
+          <div class="pt-3 border-t border-[#E2E8F0] flex items-center justify-between text-[11px] text-[#64748B]">
+            <span>Telemetry + LWT</span>
+            <span class="font-bold text-violet-600">QoS 1</span>
           </div>
         </div>
 
@@ -925,6 +949,43 @@
           <span>Jump to Live Dashboard →</span>
         </button>
       </div>
+
+      <!-- ESP32 Wiring Demo and Hardware Gallery -->
+      <section id="esp32-media" class="mt-12" aria-labelledby="esp32-media-title">
+        <div class="max-w-3xl mb-6">
+          <span class="text-xs uppercase font-bold tracking-wider text-blue-600">Build Walkthrough</span>
+          <h3 id="esp32-media-title" class="text-xl sm:text-2xl font-extrabold text-[#1E293B] mt-1">ESP32 Wiring Demo &amp; Hardware Photos</h3>
+          <p class="text-sm text-[#64748B] mt-2">Watch the digital wiring diagram, then view the ESP32, each sensor, and the completed physical wiring.</p>
+        </div>
+
+        <div class="bg-white rounded-2xl border border-[#E2E8F0] p-3 sm:p-5 shadow-sm mb-6">
+          <iframe
+            class="w-full rounded-xl bg-slate-950 aspect-video"
+            src="https://www.youtube-nocookie.com/embed/mT-PkmrtRMs"
+            title="ESP32 Sensor Wiring Demo: BH1750, HC-SR04 &amp; Soil Moisture"
+            allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"
+            referrerpolicy="strict-origin-when-cross-origin"
+            allowfullscreen>
+          </iframe>
+          <p class="text-xs text-[#64748B] mt-3">Digital wiring diagram demo</p>
+        </div>
+
+        <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-5">
+          @for (photo of [
+            {file:'esp32-board.jpg', title:'ESP32 Microcontroller', description:'ESP32 board'},
+            {file:'bh1750-light-sensor.jpg', title:'BH1750 Light Sensor', description:'Light sensor'},
+            {file:'hc-sr04-ultrasonic.jpg', title:'HC-SR04 Ultrasonic Sensor', description:'Ultrasonic sensor'},
+            {file:'soil-moisture-sensor.jpg', title:'Soil Moisture Sensor', description:'Soil moisture sensor'},
+            {file:'physical-wiring-1.jpg', title:'Completed Physical Wiring', description:'Overall wiring view 1'},
+            {file:'physical-wiring-2.jpg', title:'Completed Physical Wiring', description:'Overall wiring view 2'}
+          ]; track photo.file) {
+            <figure class="bg-white rounded-2xl border border-[#E2E8F0] p-3 shadow-sm">
+              <img class="w-full aspect-[4/3] object-cover rounded-xl bg-slate-100" [src]="'/esp32-media/' + photo.file" [alt]="photo.description" loading="lazy">
+              <figcaption class="text-sm font-bold text-[#1E293B] px-1 pt-3">{{ photo.title }}</figcaption>
+            </figure>
+          }
+        </div>
+      </section>
 
     </div>
   </section>
