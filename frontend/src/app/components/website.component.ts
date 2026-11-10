@@ -902,7 +902,7 @@ return msg;
       category: 'Visualization',
       completed: false,
       content: {
-        intro: 'The node-red-dashboard package adds a complete set of UI nodes to create web-based dashboards directly from Node-RED flows. Your live dashboard at http://10.219.89.43:1880/dashboard was created using these nodes — this tutorial shows you how.',
+        intro: 'The node-red-dashboard package adds a complete set of UI nodes to create web-based dashboards directly from Node-RED flows. The live dashboard on this host is available at port 1880 — this tutorial shows you how it works.',
         objectives: [
           'Install and configure node-red-dashboard',
           'Create groups, tabs, and layouts',
@@ -1000,10 +1000,10 @@ if (ema >= CRIT_THRESHOLD) {
           'Install Node-RED as a systemd service for automatic startup',
           'Configure Node-RED admin authentication',
           'Set up PM2 as a process manager for reliability',
-          'Configure the Angular frontend to point to the correct Node-RED IP',
+          'Access Node-RED from the same host as the Angular frontend',
           'Set up Docker containerization for consistent deployment'
         ],
-        explanation: 'For Raspberry Pi 5, use the official install script. For Ubuntu Server, install via npm and create a systemd service. Use PM2 for process management — it auto-restarts on crashes and supports log rotation. Secure the editor with username/password in settings.js. Update the Angular environment.ts file to point to the Pi\'s IP address.',
+        explanation: 'For Raspberry Pi 5, use the official install script. For Ubuntu Server, install via npm and create a systemd service. Use PM2 for process management — it auto-restarts on crashes and supports log rotation. Secure the editor with username/password in settings.js. The frontend uses the hostname from the browser URL to connect to Node-RED on port 1880.',
         codeLanguage: 'bash',
         codeLabel: 'Raspberry Pi 5 production deployment script',
         code: `# ─── Raspberry Pi 5 / Ubuntu Server Setup ───────────────────
@@ -1034,13 +1034,11 @@ sudo nano /etc/systemd/system/nodered.service
 sudo systemctl enable nodered
 sudo systemctl start nodered
 
-# 5. Update Angular frontend to point to Pi's IP
-# Edit: frontend/src/environments/environment.ts
-# Set: nodeRedDashboardUrl = 'http://192.168.x.x:1880/dashboard'
+# 5. The frontend uses the Pi hostname from its browser URL for Node-RED
 
 # 6. Check Node-RED logs
 sudo journalctl -u nodered -f`,
-        practicalTip: 'Use the Raspberry Pi\'s static IP (set in /etc/dhcpcd.conf) to ensure the Node-RED URL never changes. Update the nodeRedUrl in environment.ts before building the Angular app for deployment.',
+        practicalTip: 'Open the frontend using the Pi address and it will use that same host for Node-RED. For a stable bookmark, configure a DHCP reservation or use the Pi hostname on your network.',
         youtubeQuery: 'Node-RED Raspberry Pi production deployment systemd service tutorial'
       }
     }

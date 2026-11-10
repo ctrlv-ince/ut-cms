@@ -19,7 +19,9 @@ import {
 })
 export class ApiService {
   private http = inject(HttpClient);
-  public readonly apiUrl = 'http://localhost:3030';
+  // The page's hostname is the machine running this app. This lets other LAN
+  // clients reach the API on the same Pi without baking its DHCP address in.
+  public readonly apiUrl = `${window.location.protocol}//${window.location.hostname}:3030`;
 
   // ---------------- ARTICLES ----------------
   getArticles(): Observable<Article[]> {

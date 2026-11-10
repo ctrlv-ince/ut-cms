@@ -28,6 +28,14 @@ This automatically boots:
 - **Backend (Feathers Core + SQLite)** on [`http://localhost:3030`](http://localhost:3030)
 - **Frontend (Angular + Tailwind CSS)** on [`http://localhost:4200`](http://localhost:4200)
 
+Both servers listen on the network interfaces, so on a Raspberry Pi open
+`http://<raspberry-pi-ip>:4200` from another device on the same network. Find the
+Pi's current address with `hostname -I` on the Pi. The frontend automatically
+uses the hostname from the browser URL for the backend API (port 3030) and
+Node-RED (port 1880), so no frontend environment file needs to be edited when
+the Pi's DHCP address changes. Make sure the Pi's firewall allows ports 4200,
+3030, and 1880 if those services are in use.
+
 ---
 
 ### 2. Run Independently
@@ -37,6 +45,7 @@ This automatically boots:
 cd backend
 npm start
 ```
+- Listens on all network interfaces by default; set `HOST` or `PORT` to override.
 - REST Endpoints: `http://localhost:3030/api/articles`, `/api/services`, `/api/inquiries`, etc.
 - SQLite Database: `backend/data/cms.sqlite`
 - Uploaded Files: `backend/public/uploads`
@@ -47,7 +56,7 @@ cd frontend
 npm start
 # or npm run build for production bundle
 ```
-- Open browser at `http://localhost:4200`
+- Opens at `http://localhost:4200` locally; use `http://<host-ip>:4200` from another device.
 
 ---
 

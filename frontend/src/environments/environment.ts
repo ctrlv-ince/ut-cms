@@ -1,8 +1,7 @@
 export const environment = {
   production: false,
-  // Node-RED Configuration — change this IP when deploying to Raspberry Pi 5
-  nodeRedUrl: 'http://10.219.89.43:1880',
-  nodeRedDashboardUrl: 'http://10.219.89.43:1880/dashboard',
-  // Backend API
-  backendUrl: 'http://localhost:3030'
+  // Node-RED and the API run on the same host as the frontend.
+  nodeRedUrl: `${window.location.protocol}//${window.location.hostname}:1880`,
+  nodeRedDashboardUrl: `${window.location.protocol}//${window.location.hostname}:1880/dashboard`,
+  backendUrl: `${window.location.protocol}//${window.location.hostname}:3030`
 };

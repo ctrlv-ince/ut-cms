@@ -1488,7 +1488,7 @@
               If the dashboard is not embedding, add this to your Node-RED <code class="font-mono bg-blue-100 px-1 rounded">settings.js</code>:
               <code class="font-mono bg-blue-100 px-1 rounded ml-1">httpNodeCors: &#123; origin: "*", methods: "GET,PUT,POST,DELETE" &#125;</code>
               and ensure the dashboard HTTP response headers do not include <code class="font-mono bg-blue-100 px-1 rounded">X-Frame-Options: DENY</code>.
-              To change the Node-RED server address, edit <code class="font-mono bg-blue-100 px-1 rounded">frontend/src/environments/environment.ts</code>.
+              Node-RED is expected to run on the same host as this site, on port 1880.
             </p>
           </div>
         </div>

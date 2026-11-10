@@ -3,6 +3,7 @@ const { initializeDatabase } = require('./db');
 const { seedData } = require('./seeds/initial-data');
 
 const PORT = process.env.PORT || 3030;
+const HOST = process.env.HOST || '0.0.0.0';
 
 async function startServer() {
   try {
@@ -12,12 +13,12 @@ async function startServer() {
     console.log('[CMS Backend] Checking seed data...');
     await seedData();
 
-    const server = await app.listen(PORT);
+    const server = await app.listen(PORT, HOST);
 
     console.log(`\n========================================================`);
     console.log(` Directus-Style CMS Backend (FeathersJS Core + SQLite3)`);
-    console.log(` Running at: http://localhost:${PORT}`);
-    console.log(` REST API:   http://localhost:${PORT}/api/articles`);
+    console.log(` Listening on: ${HOST}:${PORT}`);
+    console.log(` Local API:   http://localhost:${PORT}/api/articles`);
     console.log(` Schema:     http://localhost:${PORT}/api/schema`);
     console.log(` Stats:      http://localhost:${PORT}/api/stats`);
     console.log(` Realtime:   Socket.io enabled`);

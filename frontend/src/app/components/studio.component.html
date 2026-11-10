@@ -492,7 +492,7 @@
               </div>
 
               <div class="mt-6 pt-4 border-t border-[#E2E8F0] flex items-center justify-between">
-                <span class="text-[11px] text-[#64748B]">REST Host: http://localhost:3030</span>
+                <span class="text-[11px] text-[#64748B]">REST Host: {{ api.apiUrl }}</span>
                 <button (click)="activeSection.set('schema')" class="text-xs text-blue-600 hover:text-blue-700 font-bold">
                   Inspect SQLite Schema →
                 </button>
