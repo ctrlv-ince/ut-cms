@@ -679,72 +679,29 @@
 
       </div>
 
-      <!-- Tabbed Viewer: Firmware Code, Payload Inspector, Hardware Pinout -->
-      <div class="bg-white rounded-2xl border border-[#E2E8F0] shadow-sm overflow-hidden mb-8">
-
-        <!-- Tabs Navigation -->
-        <div class="flex flex-wrap items-center justify-between border-b border-[#E2E8F0] bg-slate-50/60 px-4 sm:px-6 py-3 gap-3">
-          <div class="flex items-center gap-2">
-            <button
-              (click)="selectedFirmwareTab.set('code')"
-              [class.bg-white]="selectedFirmwareTab() === 'code'"
-              [class.text-blue-600]="selectedFirmwareTab() === 'code'"
-              [class.shadow-xs]="selectedFirmwareTab() === 'code'"
-              [class.border-blue-200]="selectedFirmwareTab() === 'code'"
-              [class.text-[#64748B]]="selectedFirmwareTab() !== 'code'"
-              class="px-3.5 py-1.5 rounded-lg text-xs font-bold border border-transparent transition-all flex items-center gap-2">
-              <svg class="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 20l4-16m4 4l4 4-4 4M6 16l-4-4 4-4" /></svg>
-              <span>BH1750 ESP32 Sketch</span>
-              <span class="text-[10px] bg-blue-100 text-blue-700 px-1.5 py-0.2 rounded font-mono">31 lines</span>
-            </button>
-
-            <button
-              (click)="selectedFirmwareTab.set('payload')"
-              [class.bg-white]="selectedFirmwareTab() === 'payload'"
-              [class.text-blue-600]="selectedFirmwareTab() === 'payload'"
-              [class.shadow-xs]="selectedFirmwareTab() === 'payload'"
-              [class.border-blue-200]="selectedFirmwareTab() === 'payload'"
-              [class.text-[#64748B]]="selectedFirmwareTab() !== 'payload'"
-              class="px-3.5 py-1.5 rounded-lg text-xs font-bold border border-transparent transition-all flex items-center gap-2">
-              <svg class="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16m-7 6h7" /></svg>
-              <span>Example MQTT JSON Payload</span>
-            </button>
-
-            <button
-              (click)="selectedFirmwareTab.set('wiring')"
-              [class.bg-white]="selectedFirmwareTab() === 'wiring'"
-              [class.text-blue-600]="selectedFirmwareTab() === 'wiring'"
-              [class.shadow-xs]="selectedFirmwareTab() === 'wiring'"
-              [class.border-blue-200]="selectedFirmwareTab() === 'wiring'"
-              [class.text-[#64748B]]="selectedFirmwareTab() !== 'wiring'"
-              class="px-3.5 py-1.5 rounded-lg text-xs font-bold border border-transparent transition-all flex items-center gap-2">
-              <svg class="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 3v2m6-2v2M9 19v2m6-2v2M5 9H3m2 6H3m18-6h-2m2 6h-2M7 19h10a2 2 0 002-2V7a2 2 0 00-2-2H7a2 2 0 00-2 2v10a2 2 0 002 2zM9 9h6v6H9V9z" /></svg>
-              <span>Hardware Pinout &amp; Wiring Map</span>
-            </button>
+      <!-- ESP32 Firmware Sketch -->
+      <section class="bg-white rounded-2xl border border-[#E2E8F0] shadow-sm overflow-hidden mb-8">
+        <div class="flex flex-wrap items-center justify-between gap-3 px-4 sm:px-6 py-4 border-b border-[#E2E8F0] bg-slate-50/60">
+          <div>
+            <h3 class="text-sm font-bold text-[#1E293B]">BH1750 ESP32 Sketch</h3>
+            <p class="text-xs text-[#64748B] mt-1">Firmware source for the sensor node.</p>
           </div>
-
-          <!-- Action: Copy Code Button -->
-          @if (selectedFirmwareTab() === 'code') {
-            <button
-              (click)="copyEsp32Code()"
-              [class.bg-emerald-600]="copiedEsp32Code()"
-              [class.text-white]="copiedEsp32Code()"
-              [class.bg-white]="!copiedEsp32Code()"
-              [class.text-[#1E293B]]="!copiedEsp32Code()"
-              class="px-3.5 py-1.5 rounded-lg text-xs font-bold border border-[#E2E8F0] shadow-xs hover:border-slate-300 transition-all flex items-center gap-1.5">
-              @if (copiedEsp32Code()) {
-                <svg class="w-3.5 h-3.5 text-white" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" d="M5 13l4 4L19 7" /></svg>
-                <span>Copied to Clipboard!</span>
-              } @else {
-                <svg class="w-3.5 h-3.5 text-blue-600" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 16H6a2 2 0 01-2-2V6a2 2 0 012-2h8a2 2 0 012 2v2m-6 12h8a2 2 0 002-2v-8a2 2 0 00-2-2h-8a2 2 0 00-2 2v8a2 2 0 002 2z" /></svg>
-                <span>Copy Firmware Code</span>
-              }
-            </button>
-          }
+          <button
+            (click)="copyEsp32Code()"
+            [class.bg-emerald-600]="copiedEsp32Code()"
+            [class.text-white]="copiedEsp32Code()"
+            [class.bg-white]="!copiedEsp32Code()"
+            [class.text-[#1E293B]]="!copiedEsp32Code()"
+            class="px-3.5 py-1.5 rounded-lg text-xs font-bold border border-[#E2E8F0] shadow-xs hover:border-slate-300 transition-all flex items-center gap-1.5">
+            @if (copiedEsp32Code()) {
+              <span>Copied to Clipboard!</span>
+            } @else {
+              <span>Copy Firmware Code</span>
+            }
+          </button>
         </div>
 
-        <!-- TAB 1: Complete C++ Firmware Code -->
-        @if (selectedFirmwareTab() === 'code') {
+        <!-- Firmware Source Code -->
           <div class="p-4 sm:p-6 bg-[#0F172A] text-slate-100">
             <div class="flex items-center justify-between pb-3 mb-4 border-b border-slate-800 text-xs text-slate-400 font-mono">
               <div class="flex items-center gap-2">
@@ -759,11 +716,11 @@
             </div>
             <pre class="font-mono text-xs text-emerald-400 leading-relaxed overflow-x-auto max-h-[520px] p-2 selection:bg-blue-600 selection:text-white" tabindex="0"><code>{{ esp32Code }}</code></pre>
           </div>
-        }
+      </section>
 
-        <!-- TAB 2: Example MQTT JSON Payload Inspector -->
-        @if (selectedFirmwareTab() === 'payload') {
-          <div class="p-6 sm:p-8 space-y-6">
+      <!-- Example MQTT JSON Payload -->
+      <section class="bg-white rounded-2xl border border-[#E2E8F0] shadow-sm overflow-hidden mb-8">
+        <div class="p-6 sm:p-8 space-y-6">
             <div>
               <h3 class="text-base font-bold text-[#1E293B] mb-1">MQTT Payload Schema: Topic <code class="text-blue-600 bg-blue-50 px-2 py-0.5 rounded font-mono">esp32/sensor_data</code></h3>
               <p class="text-xs text-[#64748B]">
@@ -840,17 +797,26 @@
               </div>
             </div>
           </div>
-        }
+      </section>
 
-        <!-- TAB 3: Hardware Pinout & Wiring Map -->
-        @if (selectedFirmwareTab() === 'wiring') {
-          <div class="p-6 sm:p-8 space-y-6">
+      <!-- Hardware Pinout & Wiring Map -->
+      <section class="bg-white rounded-2xl border border-[#E2E8F0] shadow-sm overflow-hidden mb-8">
+        <div class="p-6 sm:p-8 space-y-6">
             <div>
               <h3 class="text-base font-bold text-[#1E293B] mb-1">ESP32 Pinout &amp; Peripheral Wiring Map</h3>
               <p class="text-xs text-[#64748B]">
                 Hardware pin assignment designed by <strong class="text-[#1E293B] font-semibold">David, Lance B.</strong> BH1750 uses I²C on GPIO 21 and GPIO 22.
               </p>
             </div>
+
+            <figure class="rounded-xl border border-[#E2E8F0] bg-slate-50 p-3 sm:p-5">
+              <img
+                class="w-full max-h-[640px] object-contain rounded-lg bg-white"
+                src="/esp32-media/cirkit-diagram.jpg"
+                alt="ESP32 sensor circuit and wiring diagram from Cirkit Designer"
+                loading="lazy">
+              <figcaption class="text-xs text-[#64748B] mt-3 text-center">ESP32 sensor wiring layout · Cirkit Designer</figcaption>
+            </figure>
 
             <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
               <!-- Pinout Table -->
@@ -928,9 +894,7 @@
               </div>
             </div>
           </div>
-        }
-
-      </div>
+      </section>
 
       <!-- Live Dashboard Callout Banner -->
       <div class="bg-gradient-to-r from-blue-600 to-indigo-700 rounded-2xl p-6 sm:p-8 text-white shadow-md flex flex-col sm:flex-row items-center justify-between gap-6">
@@ -1023,44 +987,45 @@
         <div class="flex flex-col md:flex-row items-center justify-between gap-3 md:gap-0">
 
           @for (node of [
-            {id:'sensors', label:'Hardware', subtitle:'ESP32 & Sensors', detail:'MQ-2, DHT22, ADXL', borderColor:'border-blue-200', iconBg:'bg-blue-100', iconColor:'text-blue-600', labelColor:'text-blue-600'},
-            {id:'mqtt-broker', label:'MQTT Broker', subtitle:'Mosquitto', detail:'Port 1883 | TCP', borderColor:'border-sky-200', iconBg:'bg-sky-100', iconColor:'text-sky-600', labelColor:'text-sky-600'},
-            {id:'nodered-engine', label:'Node-RED Core', subtitle:'Flow Engine', detail:'Rules & Thresholds', borderColor:'border-rose-200', iconBg:'bg-rose-100', iconColor:'text-rose-600', labelColor:'text-rose-600'},
-            {id:'feathers-api', label:'FeathersJS API', subtitle:'REST & Socket.io', detail:'Port 3030', borderColor:'border-purple-200', iconBg:'bg-purple-100', iconColor:'text-purple-600', labelColor:'text-purple-600'},
-            {id:'sqlite-db', label:'SQLite + Directus', subtitle:'Persistence', detail:'WAL Mode', borderColor:'border-teal-200', iconBg:'bg-teal-100', iconColor:'text-teal-700', labelColor:'text-teal-700'},
-            {id:'dashboard-ui', label:'Angular UI', subtitle:'Dashboard', detail:'Port 4200', borderColor:'border-green-200', iconBg:'bg-green-100', iconColor:'text-green-700', labelColor:'text-green-700'}
+            {id:'sensors', category:'Hardware', label:'ESP32 & Sensors', subtitle:'MQ-2, DHT22, ADXL', detail:'Collects field telemetry', borderColor:'border-blue-200', iconBg:'bg-blue-100', iconColor:'text-blue-600', labelColor:'text-blue-600'},
+            {id:'mqtt-broker', category:'MQTT Broker', label:'Mosquitto', subtitle:'MQTT message broker', detail:'Port 1883 · TCP', borderColor:'border-sky-200', iconBg:'bg-sky-100', iconColor:'text-sky-600', labelColor:'text-sky-600'},
+            {id:'sqlite-db', category:'Database', label:'SQLite + Directus', subtitle:'Data persistence', detail:'SQLite WAL mode', borderColor:'border-teal-200', iconBg:'bg-teal-100', iconColor:'text-teal-700', labelColor:'text-teal-700'},
+            {id:'nodered-engine', category:'Middleware', label:'Node-RED Core', subtitle:'Flow engine', detail:'Applies rules & thresholds', borderColor:'border-rose-200', iconBg:'bg-rose-100', iconColor:'text-rose-600', labelColor:'text-rose-600'},
+            {id:'feathers-api', category:'Middleware', label:'FeathersJS API', subtitle:'REST & Socket.io', detail:'Serves the CMS API · Port 3030', borderColor:'border-purple-200', iconBg:'bg-purple-100', iconColor:'text-purple-600', labelColor:'text-purple-600'},
+            {id:'dashboard-ui', category:'Frontend', label:'Angular UI', subtitle:'Web dashboard', detail:'Port 4200', borderColor:'border-green-200', iconBg:'bg-green-100', iconColor:'text-green-700', labelColor:'text-green-700'}
           ]; track node.id; let last = $last) {
-            <div class="flex items-center gap-1 md:gap-0 w-full md:w-auto md:flex-col md:items-center">
+            <div class="flex items-center gap-1 md:gap-0 w-full md:w-auto md:flex-row md:items-center">
               <div
                 (click)="selectDiagramNode(node.id)"
                 [class.ring-2]="activeDiagramNode().id === node.id"
-                [class]="'cursor-pointer bg-white rounded-xl border p-4 shadow-xs hover:shadow transition-all text-center flex-1 md:flex-none md:w-28 ' + node.borderColor"
+                [class]="'cursor-pointer bg-white rounded-xl border p-4 shadow-xs hover:shadow transition-all text-center flex flex-col items-center justify-center flex-1 md:flex-none md:w-28 min-h-48 ' + node.borderColor"
                 [style.ringColor]="activeDiagramNode().id === node.id ? 'currentColor' : ''">
-                <div [class]="'w-9 h-9 rounded-lg flex items-center justify-center mx-auto mb-2 ' + node.iconBg + ' ' + node.iconColor">
-                  @switch (node.id) {
-                    @case ('sensors') {
-                      <svg class="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 3v2m6-2v2M9 19v2m6-2v2M5 9H3m2 6H3m18-6h-2m2 6h-2M7 19h10a2 2 0 002-2V7a2 2 0 00-2-2H7a2 2 0 00-2 2v10a2 2 0 002 2zM9 9h6v6H9V9z" /></svg>
+                  <div [class]="'w-9 h-9 rounded-lg flex items-center justify-center mx-auto mb-2 ' + node.iconBg + ' ' + node.iconColor">
+                    @switch (node.id) {
+                      @case ('sensors') {
+                        <svg class="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 3v2m6-2v2M9 19v2m6-2v2M5 9H3m2 6H3m18-6h-2m2 6h-2M7 19h10a2 2 0 002-2V7a2 2 0 00-2-2H7a2 2 0 00-2 2v10a2 2 0 002 2zM9 9h6v6H9V9z" /></svg>
+                      }
+                      @case ('mqtt-broker') {
+                        <svg class="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8.111 16.404a5.5 5.5 0 017.778 0M12 20h.01m-7.08-7.071c3.904-3.905 10.236-3.905 14.141 0M1.394 9.393c5.857-5.857 15.355-5.857 21.213 0" /></svg>
+                      }
+                      @case ('nodered-engine') {
+                        <svg class="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 10V3L4 14h7v7l9-11h-7z" /></svg>
+                      }
+                      @case ('feathers-api') {
+                        <svg class="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 12h14M5 12a2 2 0 01-2-2V6a2 2 0 012-2h14a2 2 0 012 2v4a2 2 0 01-2 2M5 12a2 2 0 00-2 2v4a2 2 0 002 2h14a2 2 0 002-2v-4a2 2 0 00-2-2" /></svg>
+                      }
+                      @case ('sqlite-db') {
+                        <svg class="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 7v10c0 2.21 3.582 4 8 4s8-1.79 8-4V7M4 7c0 2.21 3.582 4 8 4s8-1.79 8-4M4 7c0-2.21 3.582-4 8-4s8 1.79 8 4m0 5c0 2.21-3.582 4-8 4s-8-1.79-8-4" /></svg>
+                      }
+                      @case ('dashboard-ui') {
+                        <svg class="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9.75 17L9 20l-1 1h8l-1-1-.75-3M3 13h18M5 17h14a2 2 0 002-2V5a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z" /></svg>
+                      }
                     }
-                    @case ('mqtt-broker') {
-                      <svg class="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8.111 16.404a5.5 5.5 0 017.778 0M12 20h.01m-7.08-7.071c3.904-3.905 10.236-3.905 14.141 0M1.394 9.393c5.857-5.857 15.355-5.857 21.213 0" /></svg>
-                    }
-                    @case ('nodered-engine') {
-                      <svg class="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 10V3L4 14h7v7l9-11h-7z" /></svg>
-                    }
-                    @case ('feathers-api') {
-                      <svg class="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 12h14M5 12a2 2 0 01-2-2V6a2 2 0 012-2h14a2 2 0 012 2v4a2 2 0 01-2 2M5 12a2 2 0 00-2 2v4a2 2 0 002 2h14a2 2 0 002-2v-4a2 2 0 00-2-2" /></svg>
-                    }
-                    @case ('sqlite-db') {
-                      <svg class="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 7v10c0 2.21 3.582 4 8 4s8-1.79 8-4V7M4 7c0 2.21 3.582 4 8 4s8-1.79 8-4M4 7c0-2.21 3.582-4 8-4s8 1.79 8 4m0 5c0 2.21-3.582 4-8 4s-8-1.79-8-4" /></svg>
-                    }
-                    @case ('dashboard-ui') {
-                      <svg class="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9.75 17L9 20l-1 1h8l-1-1-.75-3M3 13h18M5 17h14a2 2 0 002-2V5a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z" /></svg>
-                    }
-                  }
-                </div>
-                <span [class]="'text-[9px] font-bold uppercase tracking-wider ' + node.labelColor">{{ node.label }}</span>
-                <h4 class="text-[10px] font-bold text-[#1E293B] mt-0.5 leading-tight">{{ node.subtitle }}</h4>
-                <div class="text-[9px] text-[#64748B] mt-0.5">{{ node.detail }}</div>
+                  </div>
+                  <span [class]="'text-[9px] font-bold uppercase tracking-wider ' + node.labelColor">{{ node.category }}</span>
+                  <h4 class="text-[10px] font-bold text-[#1E293B] mt-1 leading-tight">{{ node.label }}</h4>
+                  <div class="text-[9px] text-[#64748B] mt-1 leading-tight">{{ node.subtitle }}</div>
+                  <div class="text-[9px] text-[#64748B] mt-0.5">{{ node.detail }}</div>
               </div>
               @if (!last) {
                 <div class="hidden md:flex items-center text-slate-300 mx-1">
@@ -1542,66 +1507,46 @@
           </div>
         </div>
 
-        <!-- Dedicated Node-RED MQTT Dashboard Video -->
-        <section class="mt-8 mb-8" aria-labelledby="nodered-video-title">
-          <div class="max-w-3xl mb-5">
+        <!-- Video and guide overview -->
+        <section class="mt-6 mb-8 bg-white rounded-2xl border border-[#E2E8F0] shadow-sm overflow-hidden" aria-labelledby="nodered-video-title">
+          <div class="px-5 sm:px-7 py-5 border-b border-[#E2E8F0]">
             <span class="text-xs uppercase font-bold tracking-wider text-blue-600">Video Walkthrough</span>
-            <h3 id="nodered-video-title" class="text-xl sm:text-2xl font-extrabold text-[#1E293B] mt-1">Node-RED MQTT Dashboard Video</h3>
-            <p class="text-sm text-[#64748B] mt-1">Watch the walkthrough, then explore the implementation guide and demo details below.</p>
+            <h3 id="nodered-video-title" class="text-xl sm:text-2xl font-extrabold text-[#1E293B] mt-1">Node-RED MQTT Dashboard</h3>
+            <p class="text-sm text-[#64748B] mt-1">Watch the walkthrough, then follow the matching 14-step guide below.</p>
           </div>
-          <div class="bg-white rounded-2xl border border-[#E2E8F0] p-3 sm:p-5 shadow-sm">
-            <iframe
-              class="w-full rounded-xl bg-slate-950 aspect-video"
-              src="https://www.youtube-nocookie.com/embed/vCgUtKhWXn4"
-              title="How I Setup &amp; Displayed Real Sensor Data via MQTT on Node-RED Dashboard"
-              allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"
-              referrerpolicy="strict-origin-when-cross-origin"
-              allowfullscreen>
-            </iframe>
+          <div class="p-3 sm:p-5">
+            <div class="aspect-video overflow-hidden rounded-xl bg-slate-950">
+              <iframe
+                class="w-full h-full"
+                src="https://www.youtube-nocookie.com/embed/vCgUtKhWXn4"
+                title="How I Setup &amp; Displayed Real Sensor Data via MQTT on Node-RED Dashboard"
+                allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"
+                referrerpolicy="strict-origin-when-cross-origin"
+                allowfullscreen>
+              </iframe>
+            </div>
           </div>
-          <p class="text-xs text-[#64748B] mt-3 text-right">
-            Video not loading? <a class="font-semibold text-blue-600 hover:text-blue-700 underline" href="https://youtu.be/vCgUtKhWXn4" target="_blank" rel="noopener noreferrer">Watch on YouTube</a>
-          </p>
+          <div class="grid grid-cols-1 sm:grid-cols-2 border-t border-[#E2E8F0] bg-slate-50/60">
+            <div class="p-5 sm:p-6 sm:border-r border-[#E2E8F0]">
+              <span class="text-[11px] uppercase font-bold tracking-wider text-blue-600">Step-by-Step Guide</span>
+              <h4 class="text-base font-bold text-[#1E293B] mt-1">Build the MQTT dashboard</h4>
+              <p class="text-sm text-[#64748B] mt-2 leading-relaxed">
+                Follow 14 steps covering palette installation, broker configuration, payload processing, and live widgets for distance, soil moisture, and light readings.
+              </p>
+            </div>
+            <div class="p-5 sm:p-6">
+              <span class="text-[11px] uppercase font-bold tracking-wider text-emerald-600">In the walkthrough</span>
+              <p class="text-sm text-[#64748B] mt-2 leading-relaxed">
+                See sensor readings arrive over MQTT, get processed by Node-RED, and appear on the live dashboard.
+              </p>
+              <a class="inline-flex items-center gap-1.5 mt-3 text-xs font-bold text-blue-600 hover:text-blue-700"
+                href="https://youtu.be/vCgUtKhWXn4" target="_blank" rel="noopener noreferrer">
+                Watch on YouTube
+                <svg class="w-3.5 h-3.5" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M7 17L17 7M7 7h10v10"/></svg>
+              </a>
+            </div>
+          </div>
         </section>
-
-        <div class="grid grid-cols-1 lg:grid-cols-2 gap-5 mb-8">
-          <section class="bg-white rounded-2xl border border-[#E2E8F0] p-6 shadow-sm" aria-labelledby="nodered-guide-title">
-            <span class="text-xs uppercase font-bold tracking-wider text-blue-600">Step-by-Step Guide</span>
-            <h2 id="nodered-guide-title" class="text-xl sm:text-2xl font-extrabold text-[#1E293B] leading-tight mt-1">
-              How I Setup &amp; Displayed Real Sensor Data via MQTT on Node-RED Dashboard
-            </h2>
-            <p class="text-[#64748B] text-sm mt-3 leading-relaxed">
-              Follow this 14-step implementation covering palette installation, broker configuration, JavaScript payload distribution, and real-time dashboard widgets for ultrasonic distance, soil moisture, and light readings.
-            </p>
-          </section>
-          <section class="bg-white rounded-2xl border border-[#E2E8F0] p-6 shadow-sm" aria-labelledby="nodered-demo-title">
-            <span class="text-xs uppercase font-bold tracking-wider text-emerald-600">What the Video Shows</span>
-            <h3 id="nodered-demo-title" class="text-xl sm:text-2xl font-extrabold text-[#1E293B] mt-1">Node-RED MQTT Dashboard Demo</h3>
-            <p class="text-[#64748B] text-sm mt-3 leading-relaxed">
-              See how sensor readings arrive through MQTT, are processed by Node-RED, and appear as live values on the dashboard.
-            </p>
-          </section>
-        </div>
-
-        <!-- Image Folder Placement Callout -->
-        <div class="p-4 bg-blue-50/80 border border-blue-200 rounded-2xl flex flex-col sm:flex-row items-start sm:items-center justify-between gap-3 text-xs text-blue-900 shadow-sm">
-          <div class="flex items-center gap-3">
-            <div class="w-9 h-9 rounded-xl bg-blue-600 text-white flex items-center justify-center font-bold shrink-0 shadow-sm">
-              <svg class="w-5 h-5" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 16l4.586-4.586a2 2 0 012.828 0L16 16m-2-2l1.586-1.586a2 2 0 012.828 0L20 14m-6-6h.01M6 20h12a2 2 0 002-2V6a2 2 0 00-2-2H6a2 2 0 00-2 2v12a2 2 0 002 2z"/></svg>
-            </div>
-            <div>
-              <div class="font-bold text-blue-950">Landscape Screenshots Directory</div>
-              <div class="text-[11px] text-blue-800">
-                Drop your 14 landscape images into:
-                <code class="px-1.5 py-0.5 bg-white border border-blue-200 rounded font-mono text-[11px] font-bold text-blue-600">frontend/public/setup-guide/step-1.jpg</code> through <code class="px-1.5 py-0.5 bg-white border border-blue-200 rounded font-mono text-[11px] font-bold text-blue-600">step-14.jpg</code> (or .png)
-              </div>
-            </div>
-          </div>
-          <div class="flex items-center gap-2 text-[11px] font-semibold text-blue-700 bg-white/80 px-3 py-1.5 rounded-xl border border-blue-100">
-            <span class="w-2 h-2 rounded-full bg-emerald-500"></span>
-            <span>Landscape (16:9) • Zoom Lightbox Enabled</span>
-          </div>
-        </div>
       </div>
 
       <!-- ================= SPOTLIGHT VIEW ================= -->
@@ -1808,19 +1753,12 @@
 
                         <div>
                           <span class="inline-block px-2.5 py-0.5 rounded-full bg-blue-500/20 text-blue-300 border border-blue-400/30 text-[10px] font-bold uppercase tracking-wider mb-1.5">
-                            Landscape Screenshot Slot
+                            Step Screenshot
                           </span>
                           <h4 class="text-sm sm:text-base font-bold text-white">{{ activeStep.title }}</h4>
                         </div>
 
-                        <div class="p-2.5 rounded-xl bg-slate-800/90 border border-slate-700/80 text-[11px] text-slate-300 font-mono text-left space-y-1">
-                          <div class="text-slate-400 text-[10px] uppercase font-sans font-bold">Target File Location:</div>
-                          <div class="text-cyan-300 break-all">frontend/public/setup-guide/{{ activeStep.imageName }}</div>
-                        </div>
-
-                        <p class="text-[11px] text-slate-400">
-                          Drop your 16:9 screenshot file into the folder above to instantly display it here.
-                        </p>
+                        <p class="text-[11px] text-slate-400">Screenshot preview is unavailable.</p>
                       </div>
                     </div>
                   }

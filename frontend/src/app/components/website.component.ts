@@ -206,7 +206,6 @@ export class WebsiteComponent implements OnInit, OnDestroy {
   readonly authorName = 'David, Lance B.';
 
   // ─── ESP32 EDGE FIRMWARE & SENSORS ─────────────────────────────────────────
-  selectedFirmwareTab = signal<'code' | 'wiring' | 'payload'>('code');
   copiedEsp32Code = signal<boolean>(false);
 
   // ─── MQTT & NODE-RED SETUP GUIDE (14 STEPS) ────────────────────────────────
